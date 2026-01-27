@@ -5,7 +5,6 @@ releases/
 ###################
 *.com
 *.class
-*.dll
 *.exe
 *.o
 *.so
@@ -69,3 +68,4 @@ packages/*
 
 # Private key files #
 scripts/ssh_private_key
+.idea

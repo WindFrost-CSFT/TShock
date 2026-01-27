@@ -45,7 +45,6 @@ using TShockAPI.Localization;
 using TShockAPI.Configuration;
 using Terraria.GameContent.Creative;
 using System.Runtime.InteropServices;
-using MonoMod.Cil;
 using Terraria.Achievements;
 using Terraria.Initializers;
 using Terraria.UI.Chat;

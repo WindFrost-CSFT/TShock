@@ -47,6 +47,15 @@
     <Reference Include="HttpServer">
       <HintPath>..\prebuilts\HttpServer.dll</HintPath>
     </Reference>
+    <Reference Include="ModFramework">
+      <HintPath>..\lib\ModFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="OTAPI">
+      <HintPath>..\lib\OTAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="OTAPI.Runtime">
+      <HintPath>..\lib\OTAPI.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
