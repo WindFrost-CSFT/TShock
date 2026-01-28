@@ -110,6 +110,7 @@ namespace TShockAPI
 					{ PacketTypes.PlayerAnimation, HandlePlayerAnimation },
 					{ PacketTypes.PlayerMana, HandlePlayerMana },
 					{ PacketTypes.PlayerTeam, HandlePlayerTeam },
+					{ PacketTypes.TeamChangeWithSpawnCheck, HandlePlayerTeam },
 					{ PacketTypes.SignRead, HandleSignRead },
 					{ PacketTypes.SignNew, HandleSign },
 					{ PacketTypes.LiquidSet, HandleLiquidSet },
@@ -2751,7 +2752,6 @@ namespace TShockAPI
 
 			if (Main.ServerSideCharacter)
 			{
-
 				// As long as the player has not changed his spawnpoint since initial connection,
 				// we should not use the client's spawnpoint value. This is because the spawnpoint
 				// value is not saved on the client when SSC is enabled. Hence, we have to assert
