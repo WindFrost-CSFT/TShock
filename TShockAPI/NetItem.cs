@@ -257,8 +257,8 @@ namespace TShockAPI
 				throw new ArgumentNullException("str");
 
 			string[] comp = str.Split(',');
-			if (comp.Length != 3)
-				throw new FormatException("String does not contain three sections.");
+			if (comp.Length != 4)
+				throw new FormatException("String does not contain 4 sections.");
 
 			int netId = Int32.Parse(comp[0]);
 			int stack = Int32.Parse(comp[1]);

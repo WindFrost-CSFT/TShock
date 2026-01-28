@@ -2589,12 +2589,12 @@ namespace TShockAPI
 			if (OnPlayerSlot(args.Player, args.Data, plr, slot, stack, prefix, type) || plr != args.Player.Index || slot < 0 ||
 				slot > NetItem.MaxInventory)
 				return true;
-			if (args.Player.IgnoreSSCPackets)
-			{
-				TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerSlot rejected ignore ssc packets"));
-				args.Player.SendData(PacketTypes.PlayerSlot, "", args.Player.Index, slot, prefix);
-				return true;
-			}
+			// if (args.Player.IgnoreSSCPackets)
+			// {
+			// 	TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerSlot rejected ignore ssc packets"));
+			// 	args.Player.SendData(PacketTypes.PlayerSlot, "", args.Player.Index, slot, prefix);
+			// 	return true;
+			// }
 
 			// Garabage? Or will it cause some internal initialization or whatever?
 			var item = new Item();
@@ -3855,11 +3855,17 @@ namespace TShockAPI
 
 		private static bool HandleTeleport(GetDataHandlerArgs args)
 		{
+			return false;
 			BitsByte flag = (BitsByte)args.Data.ReadByte();
 			short id = args.Data.ReadInt16();
-			var x = args.Data.ReadSingle();
-			var y = args.Data.ReadSingle();
+			Vector2 position = args.Data.ReadVector2();
 			byte style = args.Data.ReadInt8();
+
+			Console.WriteLine($"--- Packet 65 Debug ---");
+			Console.WriteLine($"Raw BitsByte: {((byte)flag).ToString("X2")} (Hex)");
+			Console.WriteLine($"Entity ID: {id}");
+			Console.WriteLine($"Position: X:{position.X:F2}, Y:{position.Y:F2}");
+			Console.WriteLine($"Style: {style}");
 
 			int type = 0;
 			bool isNPC = type == 1;
@@ -3883,7 +3889,7 @@ namespace TShockAPI
 				extraInfo = args.Data.ReadInt32();
 			}
 
-			if (OnTeleport(args.Player, args.Data, id, flag, x, y, style, extraInfo))
+			if (OnTeleport(args.Player, args.Data, id, flag, position.X, position.Y, style, extraInfo))
 				return true;
 
 			//Rod of Discord teleport (usually (may be used by modded clients to teleport))
@@ -3918,6 +3924,11 @@ namespace TShockAPI
 					args.Player.Teleport(args.TPlayer.position.X, args.TPlayer.position.Y);
 					return true;
 				}
+			}
+
+			if (type == 3)
+			{
+				//TODO
 			}
 
 			return false;
