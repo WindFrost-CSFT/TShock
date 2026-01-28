@@ -611,8 +611,10 @@ namespace TShockAPI
 
 					var response = NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index,i, amount);
 					NetManager.Instance.SendToClient(response, player.Index);
+
 				}
 			}
+			player.IgnoreSSCPackets = false;
 		}
 
 		public static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)

@@ -2973,7 +2973,7 @@ namespace TShockAPI
 			var id = args.Data.ReadInt16();
 			var owner = args.Data.ReadInt8();
 
-			if (id < 0 || id > 400)
+			if (id is < 0 or > 400)
 				return true;
 
 			if (id == 400 && owner == 255)
