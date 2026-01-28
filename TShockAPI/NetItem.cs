@@ -100,52 +100,52 @@ namespace TShockAPI
 		                                          (LoadoutArmorSlots * 3) +
 		                                          (LoadoutDyeSlots * 3);
 
-		public static readonly Tuple<int, int> InventoryIndex = new Tuple<int, int>(0, InventorySlots);
+		public static readonly (int, int) InventoryIndex = (0, InventorySlots);
 
-		public static readonly Tuple<int, int> ArmorIndex =
-			new Tuple<int, int>(InventoryIndex.Item2, InventoryIndex.Item2 + ArmorSlots);
+		public static readonly (int, int) ArmorIndex =
+			(InventoryIndex.Item2, InventoryIndex.Item2 + ArmorSlots);
 
-		public static readonly Tuple<int, int> DyeIndex =
-			new Tuple<int, int>(ArmorIndex.Item2, ArmorIndex.Item2 + DyeSlots);
+		public static readonly (int, int) DyeIndex =
+			(ArmorIndex.Item2, ArmorIndex.Item2 + DyeSlots);
 
-		public static readonly Tuple<int, int> MiscEquipIndex =
-			new Tuple<int, int>(DyeIndex.Item2, DyeIndex.Item2 + MiscEquipSlots);
+		public static readonly (int, int) MiscEquipIndex =
+			(DyeIndex.Item2, DyeIndex.Item2 + MiscEquipSlots);
 
-		public static readonly Tuple<int, int> MiscDyeIndex =
-			new Tuple<int, int>(MiscEquipIndex.Item2, MiscEquipIndex.Item2 + MiscDyeSlots);
+		public static readonly (int, int) MiscDyeIndex =
+			(MiscEquipIndex.Item2, MiscEquipIndex.Item2 + MiscDyeSlots);
 
-		public static readonly Tuple<int, int> PiggyIndex =
-			new Tuple<int, int>(MiscDyeIndex.Item2, MiscDyeIndex.Item2 + PiggySlots);
+		public static readonly (int, int) PiggyIndex =
+			(MiscDyeIndex.Item2, MiscDyeIndex.Item2 + PiggySlots);
 
-		public static readonly Tuple<int, int> SafeIndex =
-			new Tuple<int, int>(PiggyIndex.Item2, PiggyIndex.Item2 + SafeSlots);
+		public static readonly (int, int) SafeIndex =
+			(PiggyIndex.Item2, PiggyIndex.Item2 + SafeSlots);
 
-		public static readonly Tuple<int, int> TrashIndex =
-			new Tuple<int, int>(SafeIndex.Item2, SafeIndex.Item2 + TrashSlots);
+		public static readonly (int, int) TrashIndex =
+			(SafeIndex.Item2, SafeIndex.Item2 + TrashSlots);
 
-		public static readonly Tuple<int, int> ForgeIndex =
-			new Tuple<int, int>(TrashIndex.Item2, TrashIndex.Item2 + ForgeSlots);
+		public static readonly (int, int) ForgeIndex =
+			(TrashIndex.Item2, TrashIndex.Item2 + ForgeSlots);
 
-		public static readonly Tuple<int, int> VoidIndex =
-			new Tuple<int, int>(ForgeIndex.Item2, ForgeIndex.Item2 + VoidSlots);
+		public static readonly (int, int) VoidIndex =
+			(ForgeIndex.Item2, ForgeIndex.Item2 + VoidSlots);
 
-		public static readonly Tuple<int, int> Loadout1Armor =
-			new Tuple<int, int>(VoidIndex.Item2, VoidIndex.Item2 + LoadoutArmorSlots);
+		public static readonly (int, int) Loadout1Armor =
+			(VoidIndex.Item2, VoidIndex.Item2 + LoadoutArmorSlots);
 
-		public static readonly Tuple<int, int> Loadout1Dye =
-			new Tuple<int, int>(Loadout1Armor.Item2, Loadout1Armor.Item2 + LoadoutDyeSlots);
+		public static readonly (int, int) Loadout1Dye =
+			(Loadout1Armor.Item2, Loadout1Armor.Item2 + LoadoutDyeSlots);
 
-		public static readonly Tuple<int, int> Loadout2Armor =
-			new Tuple<int, int>(Loadout1Dye.Item2, Loadout1Dye.Item2 + LoadoutArmorSlots);
+		public static readonly (int, int) Loadout2Armor =
+			(Loadout1Dye.Item2, Loadout1Dye.Item2 + LoadoutArmorSlots);
 
-		public static readonly Tuple<int, int> Loadout2Dye =
-			new Tuple<int, int>(Loadout2Armor.Item2, Loadout2Armor.Item2 + LoadoutDyeSlots);
+		public static readonly (int, int) Loadout2Dye =
+			(Loadout2Armor.Item2, Loadout2Armor.Item2 + LoadoutDyeSlots);
 
-		public static readonly Tuple<int, int> Loadout3Armor =
-			new Tuple<int, int>(Loadout2Dye.Item2, Loadout2Dye.Item2 + LoadoutArmorSlots);
+		public static readonly (int, int) Loadout3Armor =
+			(Loadout2Dye.Item2, Loadout2Dye.Item2 + LoadoutArmorSlots);
 
-		public static readonly Tuple<int, int> Loadout3Dye =
-			new Tuple<int, int>(Loadout3Armor.Item2, Loadout3Armor.Item2 + LoadoutDyeSlots);
+		public static readonly (int, int) Loadout3Dye =
+			(Loadout3Armor.Item2, Loadout3Armor.Item2 + LoadoutDyeSlots);
 
 		[JsonProperty("netID")]
 		private int _netId;

@@ -2972,8 +2972,9 @@ namespace TShockAPI
 		{
 			var id = args.Data.ReadInt16();
 			var owner = args.Data.ReadInt8();
+			//var position = args.Data.ReadVector2();
 
-			if (id is < 0 or > 400)
+			if (id is < 0 or > Main.maxItems)
 				return true;
 
 			if (id == 400 && owner == 255)
@@ -4364,9 +4365,9 @@ namespace TShockAPI
 			}
 
 			// Handle kicks/bans on mediumcore/hardcore deaths.
-			if (args.TPlayer.difficulty == 1 || args.TPlayer.difficulty == 2) // Player is not softcore
+			if (args.TPlayer.difficulty == PlayerDifficultyID.MediumCore || args.TPlayer.difficulty == PlayerDifficultyID.Hardcore) // Player is not softcore
 			{
-				bool mediumcore = args.TPlayer.difficulty == 1;
+				bool mediumcore = args.TPlayer.difficulty == PlayerDifficultyID.MediumCore;
 				bool shouldBan = mediumcore ? TShock.Config.Settings.BanOnMediumcoreDeath : TShock.Config.Settings.BanOnHardcoreDeath;
 				bool shouldKick = mediumcore ? TShock.Config.Settings.KickOnMediumcoreDeath : TShock.Config.Settings.KickOnHardcoreDeath;
 				string banReason = mediumcore ? TShock.Config.Settings.MediumcoreBanReason : TShock.Config.Settings.HardcoreBanReason;
@@ -4387,7 +4388,7 @@ namespace TShockAPI
 				}
 			}
 
-			if (args.TPlayer.difficulty == 2 && Main.ServerSideCharacter && args.Player.IsLoggedIn)
+			if (args.TPlayer.difficulty == PlayerDifficultyID.Hardcore && Main.ServerSideCharacter && args.Player.IsLoggedIn)
 			{
 				if (TShock.CharacterDB.RemovePlayer(args.Player.Account.ID))
 				{
@@ -4578,7 +4579,7 @@ namespace TShockAPI
 			// and the server will replicate the changes the client did. This means that PlayerData.StoreSlot is never called, so we need to
 			// swap around the PlayerData items ourself.
 
-			Tuple<int, int> GetArmorSlotsForLoadoutIndex(int index)
+			(int, int) GetArmorSlotsForLoadoutIndex(int index)
 			{
 				return index switch
 				{
@@ -4588,7 +4589,7 @@ namespace TShockAPI
 				};
 			}
 
-			Tuple<int, int> GetDyeSlotsForLoadoutIndex(int index)
+			(int, int) GetDyeSlotsForLoadoutIndex(int index)
 			{
 				return index switch
 				{
