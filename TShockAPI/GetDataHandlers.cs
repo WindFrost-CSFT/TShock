@@ -867,13 +867,15 @@ namespace TShockAPI
 			/// <summary>
 			/// Context of where the player is spawning from.
 			/// </summary>
+			public int Team { get; set; }
+
 			public PlayerSpawnContext SpawnContext { get; set; }
 		}
 		/// <summary>
 		/// PlayerSpawn - When a player spawns
 		/// </summary>
 		public static HandlerList<SpawnEventArgs> PlayerSpawn = new HandlerList<SpawnEventArgs>();
-		private static bool OnPlayerSpawn(TSPlayer player, MemoryStream data, byte pid, int spawnX, int spawnY, int respawnTimer, int numberOfDeathsPVE, int numberOfDeathsPVP, PlayerSpawnContext spawnContext)
+		private static bool OnPlayerSpawn(TSPlayer player, MemoryStream data, byte pid, int spawnX, int spawnY, int respawnTimer, int numberOfDeathsPVE, int numberOfDeathsPVP, int team, PlayerSpawnContext spawnContext)
 		{
 			if (PlayerSpawn == null)
 				return false;
@@ -888,6 +890,7 @@ namespace TShockAPI
 				RespawnTimer = respawnTimer,
 				NumberOfDeathsPVE = numberOfDeathsPVE,
 				NumberOfDeathsPVP = numberOfDeathsPVP,
+				Team = team,
 				SpawnContext = spawnContext
 			};
 			PlayerSpawn.Invoke(null, args);
@@ -2725,18 +2728,22 @@ namespace TShockAPI
 				return true;
 			}
 
+
+
+
 			byte player = args.Data.ReadInt8();
 			short spawnX = args.Data.ReadInt16();
 			short spawnY = args.Data.ReadInt16();
 			int respawnTimer = args.Data.ReadInt32();
 			short numberOfDeathsPVE = args.Data.ReadInt16();
 			short numberOfDeathsPVP = args.Data.ReadInt16();
+			var  team = args.Data.ReadByte();
 			PlayerSpawnContext context = (PlayerSpawnContext)args.Data.ReadByte();
 
 			if (args.Player.State >= (int)ConnectionState.RequestingWorldData && !args.Player.FinishedHandshake)
 				args.Player.FinishedHandshake = true; //If the player has requested world data before sending spawn player, they should be at the obvious ClientRequestedWorldData state. Also only set this once to remove redundant updates.
 
-			if (OnPlayerSpawn(args.Player, args.Data, player, spawnX, spawnY, respawnTimer, numberOfDeathsPVE, numberOfDeathsPVP, context))
+			if (OnPlayerSpawn(args.Player, args.Data, player, spawnX, spawnY, respawnTimer,numberOfDeathsPVE, numberOfDeathsPVP,team,  context))
 				return true;
 
 			if (!Main.ServerSideCharacter || context != PlayerSpawnContext.SpawningIntoWorld)
@@ -2764,6 +2771,7 @@ namespace TShockAPI
 					args.Player.initialSpawn = true;
 					args.Player.initialServerSpawnX = args.TPlayer.SpawnX;
 					args.Player.initialServerSpawnY = args.TPlayer.SpawnY;
+					args.Player.TPlayer.dead = false;
 
 					// initial client spawn point, do not use this to spawn the player
 					// we only use it to detect if the spawnpoint has changed during this session
@@ -3466,14 +3474,18 @@ namespace TShockAPI
 
 		private static bool HandlePlayerBuffList(GetDataHandlerArgs args)
 		{
+
+
+
+
 			var id = args.Data.ReadInt8();
 
 			if (OnPlayerBuffUpdate(args.Player, args.Data, id))
 				return true;
-
-			for (int i = 0; i < Terraria.Player.maxBuffs; i++)
+			int  buff;
+			int buffIndex = 0;
+			while ((buff = args.Data.ReadUInt16()) > 0)
 			{
-				var buff = args.Data.ReadUInt16();
 
 				if (buff == 10 && TShock.Config.Settings.DisableInvisPvP && args.TPlayer.hostile)
 					buff = 0;
@@ -3484,15 +3496,17 @@ namespace TShockAPI
 					buff = 0;
 				}
 
-				args.TPlayer.buffType[i] = buff;
-				if (args.TPlayer.buffType[i] > 0)
+				args.TPlayer.buffType[buffIndex] = buff;
+				if (args.TPlayer.buffType[buffIndex] > 0)
 				{
-					args.TPlayer.buffTime[i] = 60;
+					args.TPlayer.buffTime[buffIndex] = 60;
 				}
 				else
 				{
-					args.TPlayer.buffTime[i] = 0;
+					args.TPlayer.buffTime[buffIndex] = 0;
 				}
+
+				buffIndex++;
 			}
 
 			TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerBuffList handled event and sent data {0}", args.Player.Name));
@@ -3855,39 +3869,25 @@ namespace TShockAPI
 
 		private static bool HandleTeleport(GetDataHandlerArgs args)
 		{
-			return false;
 			BitsByte flag = (BitsByte)args.Data.ReadByte();
 			short id = args.Data.ReadInt16();
 			Vector2 position = args.Data.ReadVector2();
 			byte style = args.Data.ReadInt8();
 
-			Console.WriteLine($"--- Packet 65 Debug ---");
-			Console.WriteLine($"Raw BitsByte: {((byte)flag).ToString("X2")} (Hex)");
-			Console.WriteLine($"Entity ID: {id}");
-			Console.WriteLine($"Position: X:{position.X:F2}, Y:{position.Y:F2}");
-			Console.WriteLine($"Style: {style}");
-
 			int type = 0;
-			bool isNPC = type == 1;
 			int extraInfo = -1;
 			bool getPositionFromTarget = false;
 
 			if (flag[0])
-			{
-				type = 1;
-			}
+				type += 1;
 			if (flag[1])
-			{
-				type = 2;
-			}
+				type += 2;
 			if (flag[2])
-			{
 				getPositionFromTarget = true;
-			}
 			if (flag[3])
-			{
 				extraInfo = args.Data.ReadInt32();
-			}
+			if (getPositionFromTarget)
+				position = Main.player[id].position;
 
 			if (OnTeleport(args.Player, args.Data, id, flag, position.X, position.Y, style, extraInfo))
 				return true;

@@ -617,8 +617,9 @@ namespace TShockAPI
 
 		public static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)
 		{
+
 			for (int index = 0; index < array.Length; ++index)
-				NetMessage.TrySendData(5, number: plr, number2: (float) (slotStartIndex + index));
+				NetMessage.TrySendData(5, number: plr, number2: (float) (slotStartIndex + index),remoteClient: remoteClient, ignoreClient: ignoreClient);
 		}
 	}
 }
