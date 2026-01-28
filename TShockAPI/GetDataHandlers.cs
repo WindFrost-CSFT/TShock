@@ -2729,8 +2729,6 @@ namespace TShockAPI
 			}
 
 
-
-
 			byte player = args.Data.ReadInt8();
 			short spawnX = args.Data.ReadInt16();
 			short spawnY = args.Data.ReadInt16();
@@ -2753,6 +2751,7 @@ namespace TShockAPI
 
 			if (Main.ServerSideCharacter)
 			{
+
 				// As long as the player has not changed his spawnpoint since initial connection,
 				// we should not use the client's spawnpoint value. This is because the spawnpoint
 				// value is not saved on the client when SSC is enabled. Hence, we have to assert
@@ -2792,7 +2791,7 @@ namespace TShockAPI
 					args.Player.spawnSynced = true;
 					return false;
 				}
-
+				args.TPlayer.Spawn(context);
 				// spawn the player before teleporting
 				NetMessage.SendData((int)PacketTypes.PlayerSpawn, -1, args.Player.Index, null, args.Player.Index, (int)PlayerSpawnContext.ReviveFromDeath);
 
