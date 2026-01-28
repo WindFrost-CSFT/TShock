@@ -614,7 +614,6 @@ namespace TShockAPI
 
 				}
 			}
-			player.IgnoreSSCPackets = false;
 		}
 
 		public static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)
