@@ -20,16 +20,15 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MySql.Data.MySqlClient;
 using System.Text.RegularExpressions;
 using BCrypt.Net;
-using System.Security.Cryptography;
-using TShockAPI.DB.Queries;
 using TShockAPI.Hooks;
 
 namespace TShockAPI.DB
 {
+	extern alias BCryptNext;
+
 	/// <summary>UserAccountManager - Methods for dealing with database user accounts and other related functionality within TShock.</summary>
 	public class UserAccountManager
 	{
@@ -465,14 +464,14 @@ namespace TShockAPI.DB
 		{
 			try
 			{
-				if (BCrypt.Net.BCrypt.Verify(password, Password))
+				if (BCryptNext::BCrypt.Net.BCrypt.Verify(password, Password))
 				{
 					// If necessary, perform an upgrade to the highest work factor.
 					UpgradePasswordWorkFactor(password);
 					return true;
 				}
 			}
-			catch (SaltParseException)
+			catch (BCryptNext::BCrypt.Net.SaltParseException)
 			{
 				TShock.Log.ConsoleError(GetString($"Unable to verify the password hash for user {Name} ({ID})"));
 				return false;
@@ -520,12 +519,12 @@ namespace TShockAPI.DB
 			}
 			try
 			{
-				Password = BCrypt.Net.BCrypt.HashPassword(password.Trim(), TShock.Config.Settings.BCryptWorkFactor);
+				Password = BCryptNext::BCrypt.Net.BCrypt.HashPassword(password.Trim(), TShock.Config.Settings.BCryptWorkFactor);
 			}
 			catch (ArgumentOutOfRangeException)
 			{
 				TShock.Log.ConsoleError(GetString("Invalid BCrypt work factor in config file! Creating new hash using default work factor."));
-				Password = BCrypt.Net.BCrypt.HashPassword(password.Trim());
+				Password = BCryptNext::BCrypt.Net.BCrypt.HashPassword(password.Trim());
 			}
 		}
 
@@ -539,7 +538,7 @@ namespace TShockAPI.DB
 				int minLength = TShock.Config.Settings.MinimumPasswordLength;
 				throw new ArgumentOutOfRangeException("password", GetString($"Password must be at least {minLength} characters."));
 			}
-			Password = BCrypt.Net.BCrypt.HashPassword(password.Trim(), workFactor);
+			Password = BCryptNext::BCrypt.Net.BCrypt.HashPassword(password.Trim(), workFactor);
 		}
 
 		#region IEquatable

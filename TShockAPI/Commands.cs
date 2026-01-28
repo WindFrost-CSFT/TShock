@@ -1265,7 +1265,7 @@ namespace TShockAPI
 			args.Player.SendInfoMessage(GetString($"Name: {(TShock.Config.Settings.UseServerName ? TShock.Config.Settings.ServerName : Main.worldName)}"));
 			args.Player.SendInfoMessage(GetString("Size: {0}x{1}", Main.maxTilesX, Main.maxTilesY));
 			args.Player.SendInfoMessage(GetString($"ID: {Main.worldID}"));
-			args.Player.SendInfoMessage(GetString($"Seed: {WorldGen.currentWorldSeed}"));
+			args.Player.SendInfoMessage(GetString($"Seed: {Main.ActiveWorldFileData.SeedText}"));
 			args.Player.SendInfoMessage(GetString($"Mode: {Main.GameMode}"));
 			args.Player.SendInfoMessage(GetString($"Path: {Main.worldPathName}"));
 		}
@@ -2901,7 +2901,7 @@ namespace TShockAPI
 				var npc = npcs[0];
 				if (npc.type >= 1 && npc.type < Terraria.ID.NPCID.Count && npc.type != 113)
 				{
-					TSPlayer.Server.SpawnNPC(npc.netID, npc.FullName, amount, args.Player.TileX, args.Player.TileY, 50, 20);
+					TSPlayer.Server.SpawnNPC(npc.type, npc.FullName, amount, args.Player.TileX, args.Player.TileY, 50, 20);
 					if (args.Silent)
 					{
 						args.Player.SendSuccessMessage(GetPluralString("Spawned {0} {1} time.", "Spawned {0} {1} times.", amount, npc.FullName, amount));
@@ -3141,7 +3141,7 @@ namespace TShockAPI
 			var matches = new List<NPC>();
 			foreach (var npc in Main.npc.Where(npc => npc.active))
 			{
-				var englishName = EnglishLanguage.GetNpcNameById(npc.netID);
+				var englishName = EnglishLanguage.GetNpcNameById(npc.type);
 
 				if (string.Equals(npc.FullName, npcStr, StringComparison.InvariantCultureIgnoreCase) ||
 					string.Equals(englishName, npcStr, StringComparison.InvariantCultureIgnoreCase))
@@ -3841,7 +3841,7 @@ namespace TShockAPI
 						}
 						else if (items.Count > 1)
 						{
-							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.netID})"));
+							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.type})"));
 						}
 						else
 						{
@@ -3892,7 +3892,7 @@ namespace TShockAPI
 						}
 						else if (items.Count > 1)
 						{
-							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.netID})"));
+							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.type})"));
 						}
 						else
 						{
@@ -3937,7 +3937,7 @@ namespace TShockAPI
 						}
 						else if (items.Count > 1)
 						{
-							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.netID})"));
+							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.type})"));
 						}
 						else
 						{
@@ -3963,7 +3963,7 @@ namespace TShockAPI
 						}
 						else if (items.Count > 1)
 						{
-							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.netID})"));
+							args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.type})"));
 						}
 						else
 						{
@@ -5919,7 +5919,7 @@ namespace TShockAPI
 
 							if (Main.item[i].active && dX * dX + dY * dY <= radius * radius * 256f)
 							{
-								Main.item[i].active = false;
+								Main.item[i].TurnToAir();
 								everyone.SendData(PacketTypes.ItemDrop, "", i);
 								cleared++;
 							}
@@ -6109,13 +6109,13 @@ namespace TShockAPI
 					user.SendMultipleMatchError(npcs.Select(n => $"{n.FullName}({n.type})"));
 					return;
 				}
-				npcId = npcs[0].netID;
+				npcId = npcs[0].type;
 			}
 
 			int kills = 0;
 			for (int i = 0; i < Main.npc.Length; i++)
 			{
-				if (Main.npc[i].active && ((npcId == 0 && !Main.npc[i].townNPC && Main.npc[i].netID != NPCID.TargetDummy) || Main.npc[i].netID == npcId))
+				if (Main.npc[i].active && ((npcId == 0 && !Main.npc[i].townNPC && Main.npc[i].type != NPCID.TargetDummy) || Main.npc[i].type == npcId))
 				{
 					TSPlayer.Server.StrikeNPC(i, (int)(Main.npc[i].life + (Main.npc[i].defense * 0.6)), 0, 0);
 					kills++;
@@ -6162,7 +6162,7 @@ namespace TShockAPI
 			}
 			else if (matchedItems.Count > 1)
 			{
-				args.Player.SendMultipleMatchError(matchedItems.Select(i => $"{i.Name}({i.netID})"));
+				args.Player.SendMultipleMatchError(matchedItems.Select(i => $"{i.Name}({i.type})"));
 				return;
 			}
 			else
@@ -6255,13 +6255,13 @@ namespace TShockAPI
 				}
 				else
 				{
-					npcId = npcs[0].netID;
+					npcId = npcs[0].type;
 				}
 			}
 			int done = 0;
 			for (int i = 0; i < Main.npc.Length; i++)
 			{
-				if (Main.npc[i].active && ((npcId == 0 && !Main.npc[i].townNPC) || (Main.npc[i].netID == npcId && Main.npc[i].townNPC)))
+				if (Main.npc[i].active && ((npcId == 0 && !Main.npc[i].townNPC) || (Main.npc[i].type == npcId && Main.npc[i].townNPC)))
 				{
 					Main.npc[i].GivenName = args.Parameters[1];
 					NetMessage.SendData(56, -1, -1, NetworkText.FromLiteral(args.Parameters[1]), i, 0f, 0f, 0f, 0);
@@ -6310,7 +6310,7 @@ namespace TShockAPI
 			}
 			else if (items.Count > 1)
 			{
-				args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.netID})"));
+				args.Player.SendMultipleMatchError(items.Select(i => $"{i.Name}({i.type})"));
 			}
 			else
 			{

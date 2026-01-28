@@ -39,6 +39,8 @@ namespace TShockAPI
 		public int spawnY = -1;
 		public int? extraSlot;
 		public int? skinVariant;
+		public int? voiceVariant;
+		public float? voicePitchOffset;
 		public int? hair;
 		public byte hairDye;
 		public Color? hairColor;
@@ -130,6 +132,8 @@ namespace TShockAPI
 			this.spawnY = player.TPlayer.SpawnY;
 			extraSlot = player.TPlayer.extraAccessory ? 1 : 0;
 			this.skinVariant = player.TPlayer.skinVariant;
+			this.voiceVariant = player.TPlayer.voiceVariant;
+			this.voicePitchOffset = player.TPlayer.voicePitchOffset;
 			this.hair = player.TPlayer.hair;
 			this.hairDye = player.TPlayer.hairDye;
 			this.hairColor = player.TPlayer.hairColor;
@@ -304,6 +308,10 @@ namespace TShockAPI
 				player.TPlayer.extraAccessory = extraSlot.Value == 1 ? true : false;
 			if (this.skinVariant != null)
 				player.TPlayer.skinVariant = this.skinVariant.Value;
+			if (this.voiceVariant != null)
+				player.TPlayer.voiceVariant = this.voiceVariant.Value;
+			if (this.voicePitchOffset != null)
+				player.TPlayer.voicePitchOffset = this.voicePitchOffset.Value;
 			if (this.hair != null)
 				player.TPlayer.hair = this.hair.Value;
 			if (this.hairColor != null)
@@ -333,10 +341,11 @@ namespace TShockAPI
 					//0-58
 					player.TPlayer.inventory[i].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.inventory[i].netID != 0)
+					if (player.TPlayer.inventory[i].type!= 0)
 					{
 						player.TPlayer.inventory[i].stack = this.inventory[i].Stack;
 						player.TPlayer.inventory[i].prefix = this.inventory[i].PrefixId;
+						player.TPlayer.inventory[i].favorited = this.inventory[i].Favorited;
 					}
 				}
 				else if (i < NetItem.ArmorIndex.Item2)
@@ -345,7 +354,7 @@ namespace TShockAPI
 					var index = i - NetItem.ArmorIndex.Item1;
 					player.TPlayer.armor[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.armor[index].netID != 0)
+					if (player.TPlayer.armor[index].type != 0)
 					{
 						player.TPlayer.armor[index].stack = this.inventory[i].Stack;
 						player.TPlayer.armor[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -357,7 +366,7 @@ namespace TShockAPI
 					var index = i - NetItem.DyeIndex.Item1;
 					player.TPlayer.dye[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.dye[index].netID != 0)
+					if (player.TPlayer.dye[index].type != 0)
 					{
 						player.TPlayer.dye[index].stack = this.inventory[i].Stack;
 						player.TPlayer.dye[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -369,7 +378,7 @@ namespace TShockAPI
 					var index = i - NetItem.MiscEquipIndex.Item1;
 					player.TPlayer.miscEquips[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.miscEquips[index].netID != 0)
+					if (player.TPlayer.miscEquips[index].type != 0)
 					{
 						player.TPlayer.miscEquips[index].stack = this.inventory[i].Stack;
 						player.TPlayer.miscEquips[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -381,7 +390,7 @@ namespace TShockAPI
 					var index = i - NetItem.MiscDyeIndex.Item1;
 					player.TPlayer.miscDyes[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.miscDyes[index].netID != 0)
+					if (player.TPlayer.miscDyes[index].type != 0)
 					{
 						player.TPlayer.miscDyes[index].stack = this.inventory[i].Stack;
 						player.TPlayer.miscDyes[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -393,7 +402,7 @@ namespace TShockAPI
 					var index = i - NetItem.PiggyIndex.Item1;
 					player.TPlayer.bank.item[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.bank.item[index].netID != 0)
+					if (player.TPlayer.bank.item[index].type != 0)
 					{
 						player.TPlayer.bank.item[index].stack = this.inventory[i].Stack;
 						player.TPlayer.bank.item[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -405,7 +414,7 @@ namespace TShockAPI
 					var index = i - NetItem.SafeIndex.Item1;
 					player.TPlayer.bank2.item[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.bank2.item[index].netID != 0)
+					if (player.TPlayer.bank2.item[index].type != 0)
 					{
 						player.TPlayer.bank2.item[index].stack = this.inventory[i].Stack;
 						player.TPlayer.bank2.item[index].prefix = (byte)this.inventory[i].PrefixId;
@@ -417,7 +426,7 @@ namespace TShockAPI
 					var index = i - NetItem.TrashIndex.Item1;
 					player.TPlayer.trashItem.netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.trashItem.netID != 0)
+					if (player.TPlayer.trashItem.type != 0)
 					{
 						player.TPlayer.trashItem.stack = this.inventory[i].Stack;
 						player.TPlayer.trashItem.prefix = (byte)this.inventory[i].PrefixId;
@@ -429,7 +438,7 @@ namespace TShockAPI
 					var index = i - NetItem.ForgeIndex.Item1;
 					player.TPlayer.bank3.item[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.bank3.item[index].netID != 0)
+					if (player.TPlayer.bank3.item[index].type != 0)
 					{
 						player.TPlayer.bank3.item[index].stack = this.inventory[i].Stack;
 						player.TPlayer.bank3.item[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -441,7 +450,7 @@ namespace TShockAPI
 					var index = i - NetItem.VoidIndex.Item1;
 					player.TPlayer.bank4.item[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.bank4.item[index].netID != 0)
+					if (player.TPlayer.bank4.item[index].type != 0)
 					{
 						player.TPlayer.bank4.item[index].stack = this.inventory[i].Stack;
 						player.TPlayer.bank4.item[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -452,7 +461,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout1Armor.Item1;
 					player.TPlayer.Loadouts[0].Armor[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[0].Armor[index].netID != 0)
+					if (player.TPlayer.Loadouts[0].Armor[index].type != 0)
 					{
 						player.TPlayer.Loadouts[0].Armor[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[0].Armor[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -463,7 +472,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout1Dye.Item1;
 					player.TPlayer.Loadouts[0].Dye[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[0].Dye[index].netID != 0)
+					if (player.TPlayer.Loadouts[0].Dye[index].type != 0)
 					{
 						player.TPlayer.Loadouts[0].Dye[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[0].Dye[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -474,7 +483,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout2Armor.Item1;
 					player.TPlayer.Loadouts[1].Armor[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[1].Armor[index].netID != 0)
+					if (player.TPlayer.Loadouts[1].Armor[index].type != 0)
 					{
 						player.TPlayer.Loadouts[1].Armor[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[1].Armor[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -485,7 +494,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout2Dye.Item1;
 					player.TPlayer.Loadouts[1].Dye[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[1].Dye[index].netID != 0)
+					if (player.TPlayer.Loadouts[1].Dye[index].type != 0)
 					{
 						player.TPlayer.Loadouts[1].Dye[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[1].Dye[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -496,7 +505,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout3Armor.Item1;
 					player.TPlayer.Loadouts[2].Armor[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[2].Armor[index].netID != 0)
+					if (player.TPlayer.Loadouts[2].Armor[index].type != 0)
 					{
 						player.TPlayer.Loadouts[2].Armor[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[2].Armor[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -507,7 +516,7 @@ namespace TShockAPI
 					var index = i - NetItem.Loadout3Dye.Item1;
 					player.TPlayer.Loadouts[2].Dye[index].netDefaults(this.inventory[i].NetId);
 
-					if (player.TPlayer.Loadouts[2].Dye[index].netID != 0)
+					if (player.TPlayer.Loadouts[2].Dye[index].type != 0)
 					{
 						player.TPlayer.Loadouts[2].Dye[index].stack = this.inventory[i].Stack;
 						player.TPlayer.Loadouts[2].Dye[index].Prefix((byte)this.inventory[i].PrefixId);
@@ -708,7 +717,7 @@ namespace TShockAPI
 
 			NetMessage.SendData(39, player.Index, -1, NetworkText.Empty, 400);
 
-			if (Main.GameModeInfo.IsJourneyMode)
+			if (Main.IsJourneyMode)
 			{
 				var sacrificedItems = TShock.ResearchDatastore.GetSacrificedItems();
 				for(int i = 0; i < ItemID.Count; i++)
@@ -719,7 +728,7 @@ namespace TShockAPI
 						amount = sacrificedItems[i];
 					}
 
-					var response = NetCreativeUnlocksModule.SerializeItemSacrifice(i, amount);
+					var response = NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index,i, amount);
 					NetManager.Instance.SendToClient(response, player.Index);
 				}
 			}

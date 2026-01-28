@@ -51,6 +51,7 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</None>
+		<PackageReference Include="System.IO.Packaging" Version="10.0.2" />
 	</ItemGroup>
 
 	<Target Name="CheckMsgfmtCallable">

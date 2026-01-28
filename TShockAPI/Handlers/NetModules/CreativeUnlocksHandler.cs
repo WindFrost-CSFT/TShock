@@ -15,10 +15,12 @@ namespace TShockAPI.Handlers.NetModules
 		/// An unknown field. If this does not have a value of '0' the packet should be rejected.
 		/// </summary>
 		public byte UnknownField { get; set; }
+
 		/// <summary>
 		/// ID of the item being sacrificed
 		/// </summary>
 		public ushort ItemId { get; set; }
+
 		/// <summary>
 		/// Stack size of the item being sacrificed
 		/// </summary>
@@ -49,10 +51,11 @@ namespace TShockAPI.Handlers.NetModules
 		/// <param name="rejectPacket"></param>
 		public void HandlePacket(TSPlayer player, out bool rejectPacket)
 		{
-			if (!Main.GameModeInfo.IsJourneyMode)
+			if (!Main.IsJourneyMode)
 			{
 				TShock.Log.ConsoleDebug(
-					GetString($"NetModuleHandler received attempt to unlock sacrifice while not in journey mode from {player.Name}")
+					GetString(
+						$"NetModuleHandler received attempt to unlock sacrifice while not in journey mode from {player.Name}")
 				);
 
 				rejectPacket = true;
@@ -62,7 +65,8 @@ namespace TShockAPI.Handlers.NetModules
 			if (UnknownField != 0)
 			{
 				TShock.Log.ConsoleDebug(
-					GetString($"CreativeUnlocksHandler received non-vanilla unlock request. Random field value: {UnknownField} but should be 0 from {player.Name}")
+					GetString(
+						$"CreativeUnlocksHandler received non-vanilla unlock request. Random field value: {UnknownField} but should be 0 from {player.Name}")
 				);
 
 				rejectPacket = true;
@@ -78,7 +82,8 @@ namespace TShockAPI.Handlers.NetModules
 
 			var totalSacrificed = TShock.ResearchDatastore.SacrificeItem(ItemId, Amount, player);
 
-			var response = NetCreativeUnlocksModule.SerializeItemSacrifice(ItemId, totalSacrificed);
+			var response =
+				NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index, ItemId, totalSacrificed);
 			NetManager.Instance.Broadcast(response);
 
 			rejectPacket = false;

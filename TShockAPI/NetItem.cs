@@ -94,36 +94,70 @@ namespace TShockAPI
 		/// <summary>
 		/// 180 - The inventory size (inventory, held item, armour, dies, coins, ammo, piggy, safe, and trash)
 		/// </summary>
-		public static readonly int MaxInventory = InventorySlots + ArmorSlots + DyeSlots + MiscEquipSlots + MiscDyeSlots + PiggySlots +
-		                                          SafeSlots + ForgeSlots + VoidSlots + TrashSlots + (LoadoutArmorSlots * 3) +
+		public static readonly int MaxInventory = InventorySlots + ArmorSlots + DyeSlots + MiscEquipSlots +
+		                                          MiscDyeSlots + PiggySlots +
+		                                          SafeSlots + ForgeSlots + VoidSlots + TrashSlots +
+		                                          (LoadoutArmorSlots * 3) +
 		                                          (LoadoutDyeSlots * 3);
 
 		public static readonly Tuple<int, int> InventoryIndex = new Tuple<int, int>(0, InventorySlots);
-		public static readonly Tuple<int, int> ArmorIndex = new Tuple<int, int>(InventoryIndex.Item2, InventoryIndex.Item2 + ArmorSlots);
-		public static readonly Tuple<int, int> DyeIndex = new Tuple<int, int>(ArmorIndex.Item2, ArmorIndex.Item2 + DyeSlots);
-		public static readonly Tuple<int, int> MiscEquipIndex = new Tuple<int, int>(DyeIndex.Item2, DyeIndex.Item2 + MiscEquipSlots);
-		public static readonly Tuple<int, int> MiscDyeIndex = new Tuple<int, int>(MiscEquipIndex.Item2, MiscEquipIndex.Item2 + MiscDyeSlots);
-		public static readonly Tuple<int, int> PiggyIndex = new Tuple<int, int>(MiscDyeIndex.Item2, MiscDyeIndex.Item2 + PiggySlots);
-		public static readonly Tuple<int, int> SafeIndex = new Tuple<int, int>(PiggyIndex.Item2, PiggyIndex.Item2 + SafeSlots);
-		public static readonly Tuple<int, int> TrashIndex = new Tuple<int, int>(SafeIndex.Item2, SafeIndex.Item2 + TrashSlots);
-		public static readonly Tuple<int, int> ForgeIndex = new Tuple<int, int>(TrashIndex.Item2, TrashIndex.Item2 + ForgeSlots);
-		public static readonly Tuple<int, int> VoidIndex = new Tuple<int, int>(ForgeIndex.Item2, ForgeIndex.Item2 + VoidSlots);
 
-		public static readonly Tuple<int, int> Loadout1Armor = new Tuple<int, int>(VoidIndex.Item2, VoidIndex.Item2 + LoadoutArmorSlots);
-		public static readonly Tuple<int, int> Loadout1Dye = new Tuple<int, int>(Loadout1Armor.Item2, Loadout1Armor.Item2 + LoadoutDyeSlots);
+		public static readonly Tuple<int, int> ArmorIndex =
+			new Tuple<int, int>(InventoryIndex.Item2, InventoryIndex.Item2 + ArmorSlots);
 
-		public static readonly Tuple<int, int> Loadout2Armor = new Tuple<int, int>(Loadout1Dye.Item2, Loadout1Dye.Item2 + LoadoutArmorSlots);
-		public static readonly Tuple<int, int> Loadout2Dye = new Tuple<int, int>(Loadout2Armor.Item2, Loadout2Armor.Item2 + LoadoutDyeSlots);
+		public static readonly Tuple<int, int> DyeIndex =
+			new Tuple<int, int>(ArmorIndex.Item2, ArmorIndex.Item2 + DyeSlots);
 
-		public static readonly Tuple<int, int> Loadout3Armor = new Tuple<int, int>(Loadout2Dye.Item2, Loadout2Dye.Item2 + LoadoutArmorSlots);
-		public static readonly Tuple<int, int> Loadout3Dye = new Tuple<int, int>(Loadout3Armor.Item2, Loadout3Armor.Item2 + LoadoutDyeSlots);
+		public static readonly Tuple<int, int> MiscEquipIndex =
+			new Tuple<int, int>(DyeIndex.Item2, DyeIndex.Item2 + MiscEquipSlots);
+
+		public static readonly Tuple<int, int> MiscDyeIndex =
+			new Tuple<int, int>(MiscEquipIndex.Item2, MiscEquipIndex.Item2 + MiscDyeSlots);
+
+		public static readonly Tuple<int, int> PiggyIndex =
+			new Tuple<int, int>(MiscDyeIndex.Item2, MiscDyeIndex.Item2 + PiggySlots);
+
+		public static readonly Tuple<int, int> SafeIndex =
+			new Tuple<int, int>(PiggyIndex.Item2, PiggyIndex.Item2 + SafeSlots);
+
+		public static readonly Tuple<int, int> TrashIndex =
+			new Tuple<int, int>(SafeIndex.Item2, SafeIndex.Item2 + TrashSlots);
+
+		public static readonly Tuple<int, int> ForgeIndex =
+			new Tuple<int, int>(TrashIndex.Item2, TrashIndex.Item2 + ForgeSlots);
+
+		public static readonly Tuple<int, int> VoidIndex =
+			new Tuple<int, int>(ForgeIndex.Item2, ForgeIndex.Item2 + VoidSlots);
+
+		public static readonly Tuple<int, int> Loadout1Armor =
+			new Tuple<int, int>(VoidIndex.Item2, VoidIndex.Item2 + LoadoutArmorSlots);
+
+		public static readonly Tuple<int, int> Loadout1Dye =
+			new Tuple<int, int>(Loadout1Armor.Item2, Loadout1Armor.Item2 + LoadoutDyeSlots);
+
+		public static readonly Tuple<int, int> Loadout2Armor =
+			new Tuple<int, int>(Loadout1Dye.Item2, Loadout1Dye.Item2 + LoadoutArmorSlots);
+
+		public static readonly Tuple<int, int> Loadout2Dye =
+			new Tuple<int, int>(Loadout2Armor.Item2, Loadout2Armor.Item2 + LoadoutDyeSlots);
+
+		public static readonly Tuple<int, int> Loadout3Armor =
+			new Tuple<int, int>(Loadout2Dye.Item2, Loadout2Dye.Item2 + LoadoutArmorSlots);
+
+		public static readonly Tuple<int, int> Loadout3Dye =
+			new Tuple<int, int>(Loadout3Armor.Item2, Loadout3Armor.Item2 + LoadoutDyeSlots);
 
 		[JsonProperty("netID")]
 		private int _netId;
+
 		[JsonProperty("prefix")]
 		private byte _prefixId;
+
 		[JsonProperty("stack")]
 		private int _stack;
+
+		[JsonProperty("favorited")]
+		private bool _favorited;
 
 		/// <summary>
 		/// Gets the net ID.
@@ -150,16 +184,27 @@ namespace TShockAPI
 		}
 
 		/// <summary>
+		/// Gets the favorited.
+		/// </summary>
+		public bool Favorited
+		{
+			get { return _favorited; }
+		}
+
+
+		/// <summary>
 		/// Creates a new <see cref="NetItem"/>.
 		/// </summary>
 		/// <param name="netId">The net ID.</param>
 		/// <param name="stack">The stack.</param>
 		/// <param name="prefixId">The prefix ID.</param>
-		public NetItem(int netId, int stack = 1, byte prefixId = 0)
+		/// <param name="favorited">The favorited.</param>
+		public NetItem(int netId, int stack = 1, byte prefixId = 0, bool favorited = false)
 		{
 			_netId = netId;
 			_stack = stack;
 			_prefixId = prefixId;
+			_favorited = favorited;
 		}
 
 		/// <summary>
@@ -168,9 +213,10 @@ namespace TShockAPI
 		/// <param name="item">Item in the game.</param>
 		public NetItem(Item item)
 		{
-			_netId = item.netID;
+			_netId = item.type;
 			_stack = item.stack;
 			_prefixId = item.prefix;
+			_favorited = item.favorited;
 		}
 
 		/// <summary>
@@ -184,6 +230,7 @@ namespace TShockAPI
 			item.netDefaults(_netId);
 			item.stack = _stack;
 			item.prefix = _prefixId;
+			item.favorited = _favorited;
 
 			return item;
 		}
@@ -194,7 +241,7 @@ namespace TShockAPI
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return String.Format("{0},{1},{2}", _netId, _stack, _prefixId);
+			return String.Format("{0},{1},{2},{3}", _netId, _stack, _prefixId, _favorited ? 1 : 0);
 		}
 
 		/// <summary>
@@ -216,8 +263,9 @@ namespace TShockAPI
 			int netId = Int32.Parse(comp[0]);
 			int stack = Int32.Parse(comp[1]);
 			byte prefixId = Byte.Parse(comp[2]);
+			bool favorited = Int32.Parse(comp[3]) == 1;
 
-			return new NetItem(netId, stack, prefixId);
+			return new NetItem(netId, stack, prefixId, favorited);
 		}
 
 		/// <summary>
@@ -229,7 +277,7 @@ namespace TShockAPI
 		{
 			return item == null
 				? new NetItem()
-				: new NetItem(item.netID, item.stack, item.prefix);
+				: new NetItem(item.type, item.stack, item.prefix, item.favorited);
 		}
 	}
 }
