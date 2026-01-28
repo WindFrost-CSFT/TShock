@@ -23,6 +23,38 @@ namespace TShockAPI.Models.PlayerUpdate
 			set => bitsbyte[0] = value;
 		}
 
+		public bool AutoReuseAllWeapons
+		{
+			get => bitsbyte[1];
+			set => bitsbyte[1] = value;
+		}
+		public bool ControlDownHold
+		{
+			get => bitsbyte[2];
+			set => bitsbyte[2] = value;
+		}
+
+		public bool IsOperatingAnotherEntity
+		{
+			get => bitsbyte[3];
+			set => bitsbyte[3] = value;
+		}
+		public bool ControlUseTile
+		{
+			get => bitsbyte[4];
+			set => bitsbyte[4] = value;
+		}
+		public bool HasNetCameraTarget
+		{
+			get => bitsbyte[5];
+			set => bitsbyte[5] = value;
+		}
+		public bool LastItemUseAttemptSuccess
+		{
+			get => bitsbyte[6];
+			set => bitsbyte[6] = value;
+		}
+
 		/// <summary>
 		/// Constructs a new instance of MiscDataSet3 with the given backing BitsByte
 		/// </summary>

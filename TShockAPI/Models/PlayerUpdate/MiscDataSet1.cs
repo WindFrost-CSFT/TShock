@@ -75,6 +75,12 @@ namespace TShockAPI.Models.PlayerUpdate
 			set => bitsbyte[6] = value;
 		}
 
+		public bool IsMountActive
+		{
+			get => bitsbyte[7];
+			set => bitsbyte[7] = value;
+		}
+
 		/// <summary>
 		/// Constructs a new instance of MiscDataSet1 with the given backing BitsByte
 		/// </summary>

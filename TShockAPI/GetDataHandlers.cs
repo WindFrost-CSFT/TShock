@@ -338,6 +338,7 @@ namespace TShockAPI
 			/// Velocity of the player.
 			/// </summary>
 			public Vector2 Velocity { get; set; }
+			public ushort? MountType { get; set; }
 			/// <summary>
 			/// Original position of the player when using Potion of Return.
 			/// </summary>
@@ -346,6 +347,7 @@ namespace TShockAPI
 			/// Home Position of the player for Potion of Return.
 			/// </summary>
 			public Vector2? HomePos { get; set; }
+			public Vector2? NetCameraTarget { get; set; }
 
 		}
 		/// <summary>
@@ -363,8 +365,10 @@ namespace TShockAPI
 			byte selectedItem,
 			Vector2 position,
 			Vector2 velocity,
+			ushort? mountType,
 			Vector2? originalPos,
-			Vector2? homePos)
+			Vector2? homePos,
+			Vector2? netCameraTarget)
 		{
 			if (PlayerUpdate == null)
 				return false;
@@ -381,8 +385,10 @@ namespace TShockAPI
 				SelectedItem = selectedItem,
 				Position = position,
 				Velocity = velocity,
+				MountType = mountType,
 				OriginalPos = originalPos,
-				HomePos = homePos
+				HomePos = homePos,
+				NetCameraTarget = netCameraTarget
 			};
 			PlayerUpdate.Invoke(null, args);
 			return args.Handled;
@@ -2826,7 +2832,15 @@ namespace TShockAPI
 
 			Vector2 velocity = Vector2.Zero;
 			if (miscData1.HasVelocity)
+			{
 				velocity = args.Data.ReadVector2();
+			}
+
+			ushort? mountType = null;
+			if (miscData1.IsMountActive)
+			{
+				mountType = args.Data.ReadUInt16();
+			}
 
 			Vector2? originalPosition = new Vector2?();
 			Vector2? homePosition = Vector2.Zero;
@@ -2837,7 +2851,13 @@ namespace TShockAPI
 				TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerUpdate home position delta {0}", args.Player.Name));
 			}
 
-			if (OnPlayerUpdate(args.Player, args.Data, playerID, controls, miscData1, miscData2, miscData3, selectedItem, position, velocity, originalPosition, homePosition))
+			Vector2? netCameraTarget = null;
+			if (miscData3.HasNetCameraTarget)
+			{
+				netCameraTarget = args.Data.ReadVector2();
+			}
+
+			if (OnPlayerUpdate(args.Player, args.Data, playerID, controls, miscData1, miscData2, miscData3, selectedItem, position, velocity, mountType, originalPosition, homePosition, netCameraTarget))
 				return true;
 
 			return false;
