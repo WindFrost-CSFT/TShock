@@ -2126,7 +2126,7 @@ namespace TShockAPI
 				if (detectedNPCBuffTimeCheat)
 				{
 					TShock.Log.ConsoleDebug(GetString("Bouncer / OnNPCAddBuff rejected abnormal buff ({0}, last for {4}) added to {1} ({2}) from {3}.", type, npc.TypeName, npc.type, args.Player.Name, time));
-					args.Player.Kick(GetString($"Added buff to {npc.TypeName} NPC abnormally."), true);
+					args.Player.Kick($"Added buff {type} to {npc.TypeName} NPC abnormally.", true);
 					args.Handled = true;
 				}
 			}
