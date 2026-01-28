@@ -62,7 +62,7 @@ namespace TShockAPI
 		/// <summary>VersionNum - The version number the TerrariaAPI will return back to the API. We just use the Assembly info.</summary>
 		public static readonly Version VersionNum = Assembly.GetExecutingAssembly().GetName().Version;
 		/// <summary>VersionCodename - The version codename is displayed when the server starts. Inspired by software codenames conventions.</summary>
-		public static readonly string VersionCodename = "!!!   You are using a dangerous testing version   !!!";
+		public static readonly string VersionCodename = "!!!   You are using a very unofficial dangerous testing version   !!!";
 
 		/// <summary>SavePath - This is the path TShock saves its data in. This path is relative to the TerrariaServer.exe (not in ServerPlugins).</summary>
 		public static string SavePath = "tshock";
@@ -1028,7 +1028,7 @@ namespace TShockAPI
 				Console.WriteLine(GetString("This token will display until disabled by verification. ({0}setup)", Commands.Specifier));
 				Console.ResetColor();
 			}
-			Log.ConsoleError(GetString("!!!   You are using a dangerous testing version   !!!"));
+			Log.ConsoleError(GetString("!!!   You are using a very unofficial dangerous testing version   !!!"));
 			Regions.Reload();
 			Warps.ReloadWarps();
 
