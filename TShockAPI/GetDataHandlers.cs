@@ -40,6 +40,8 @@ using TShockAPI.Models.PlayerUpdate;
 using TShockAPI.Models.Projectiles;
 using Terraria.Net;
 using Terraria.GameContent.NetModules;
+using Terraria.GameContent;
+using Terraria.GameContent.Items;
 
 namespace TShockAPI
 {
@@ -156,7 +158,25 @@ namespace TShockAPI
 					{ PacketTypes.SyncLoadout, HandleSyncLoadout }
 				};
 		}
-
+		[Conditional("FALSE")]
+		private static void NetModuleIDCheck()
+		{
+			Debug.Assert(NetManager.Instance.GetId<NetLiquidModule>() == (int)NetModuleType.Liquid);
+			Debug.Assert(NetManager.Instance.GetId<NetTextModule>() == (int)NetModuleType.Text);
+			Debug.Assert(NetManager.Instance.GetId<NetPingModule>() == (int)NetModuleType.Ping);
+			Debug.Assert(NetManager.Instance.GetId<NetAmbienceModule>() == (int)NetModuleType.Ambience);
+			Debug.Assert(NetManager.Instance.GetId<NetBestiaryModule>() == (int)NetModuleType.Bestiary);
+			Debug.Assert(NetManager.Instance.GetId<NetCreativePowersModule>() == (int)NetModuleType.CreativePowers);
+			Debug.Assert(NetManager.Instance.GetId<NetCreativeUnlocksPlayerReportModule>() == (int)NetModuleType.CreativeUnlocksPlayerReport);
+			Debug.Assert(NetManager.Instance.GetId<NetTeleportPylonModule>() == (int)NetModuleType.TeleportPylon);
+			Debug.Assert(NetManager.Instance.GetId<NetParticlesModule>() == (int)NetModuleType.Particles);
+			Debug.Assert(NetManager.Instance.GetId<NetCreativePowerPermissionsModule>() == (int)NetModuleType.CreativePowerPermissions);
+			Debug.Assert(NetManager.Instance.GetId<BannerSystem.NetBannersModule>() == (int)NetModuleType.Banners);
+			Debug.Assert(NetManager.Instance.GetId<CraftingRequests.NetCraftingRequestsModule>() == (int)NetModuleType.CraftingRequests);
+			Debug.Assert(NetManager.Instance.GetId<TagEffectState.NetModule>() == (int)NetModuleType.TagEffectState);
+			Debug.Assert(NetManager.Instance.GetId<LeashedEntity.NetModule>() == (int)NetModuleType.LeashedEntity);
+			Debug.Assert(NetManager.Instance.GetId<UnbreakableWallScan.NetModule>() == (int)NetModuleType.UnbreakableWallScan);
+		}
 		public static bool HandlerGetData(PacketTypes type, TSPlayer player, MemoryStream data)
 		{
 			GetDataHandlerDelegate handler;
@@ -4859,8 +4879,8 @@ namespace TShockAPI
 			TeleportPylon,
 			Particles,
 			CreativePowerPermissions,
-			NetBanners,
-			NetCraftingRequests,
+			Banners,
+			CraftingRequests,
 			TagEffectState,
 			LeashedEntity,
 			UnbreakableWallScan
