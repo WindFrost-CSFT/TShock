@@ -181,7 +181,7 @@ namespace TShockPluginManager
 		}
 		static public void DumpGraph(SourcePackageDependencyInfo from, IEnumerable<SourcePackageDependencyInfo> data, IEnumerable<SourcePackageDependencyInfo> builtins, int level)
 		{
-			var indent = new String('\t', level);
+			var indent = new string('\t', level);
 			Console.Write(indent);
 
 			CLIHelpers.WriteLine(C.GetString($"<green>{from.Id} <black>from <blue>{from.Source.PackageSource.Name} <black>[{from.Source.PackageSource.Source}]"));

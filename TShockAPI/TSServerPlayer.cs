@@ -76,14 +76,7 @@ namespace TShockAPI
 
 			foreach (var snippet in snippets)
 			{
-				if (snippet.Color != null)
-				{
-					Console.ForegroundColor = PickNearbyConsoleColor(snippet.Color);
-				}
-				else
-				{
-					Console.ForegroundColor = ConsoleColor.Gray;
-				}
+				Console.ForegroundColor = PickNearbyConsoleColor(snippet.Color);
 
 				Console.Write(snippet.Text);
 			}

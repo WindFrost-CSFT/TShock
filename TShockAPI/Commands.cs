@@ -740,7 +740,7 @@ namespace TShockAPI
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		private static List<String> ParseParameters(string str)
+		private static List<string> ParseParameters(string str)
 		{
 			var ret = new List<string>();
 			var sb = new StringBuilder();
@@ -857,7 +857,7 @@ namespace TShockAPI
 			}
 			else if (args.Parameters.Count == 2 && TShock.Config.Settings.AllowLoginAnyUsername)
 			{
-				if (String.IsNullOrEmpty(args.Parameters[0]))
+				if (string.IsNullOrEmpty(args.Parameters[0]))
 				{
 					args.Player.SendErrorMessage(GetString("Bad login attempt."));
 					return;
@@ -890,7 +890,7 @@ namespace TShockAPI
 				}
 				else if (account.VerifyPassword(password) ||
 						(usingUUID && account.UUID == args.Player.UUID && !TShock.Config.Settings.DisableUUIDLogin &&
-						!String.IsNullOrWhiteSpace(args.Player.UUID)))
+						!string.IsNullOrWhiteSpace(args.Player.UUID)))
 				{
 					var group = TShock.Groups.GetGroupByName(account.Group);
 
@@ -1300,14 +1300,14 @@ namespace TShockAPI
 				return;
 			}
 
-			string username = String.Join(" ", args.Parameters);
+			string username = string.Join(" ", args.Parameters);
 			if (!string.IsNullOrWhiteSpace(username))
 			{
 				var account = TShock.UserAccounts.GetUserAccountByName(username);
 				if (account != null)
 				{
 					DateTime LastSeen;
-					string Timezone = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours.ToString("+#;-#");
+					string Timezone = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now).Hours.ToString("+#;-#");
 
 					if (DateTime.TryParse(account.LastAccessed, out LastSeen))
 					{
@@ -1359,7 +1359,7 @@ namespace TShockAPI
 			else
 			{
 				string reason = args.Parameters.Count > 1
-									? String.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1))
+									? string.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1))
 									: GetString("Misbehaviour.");
 				if (!players[0].Kick(reason, !args.Player.RealPlayer, false, args.Player.Name))
 				{
@@ -2066,13 +2066,13 @@ namespace TShockAPI
 				}
 			}
 
-			string reason = ((args.Parameters.Count > 0) ? GetString("Server shutting down: ") + String.Join(" ", args.Parameters) : GetString("Server shutting down!"));
+			string reason = ((args.Parameters.Count > 0) ? GetString("Server shutting down: ") + string.Join(" ", args.Parameters) : GetString("Server shutting down!"));
 			TShock.Utils.StopServer(true, reason);
 		}
 
 		private static void OffNoSave(CommandArgs args)
 		{
-			string reason = ((args.Parameters.Count > 0) ? GetString("Server shutting down: ") + String.Join(" ", args.Parameters) : GetString("Server shutting down."));
+			string reason = ((args.Parameters.Count > 0) ? GetString("Server shutting down: ") + string.Join(" ", args.Parameters) : GetString("Server shutting down."));
 			Netplay.SaveOnServerExit = false;
 			TShock.Utils.StopServer(false, reason);
 		}
@@ -2082,7 +2082,7 @@ namespace TShockAPI
 			args.Player.SendInfoMessage(GetString("An update check has been queued. If an update is available, you will be notified shortly."));
 			try
 			{
-				TShock.UpdateManager.UpdateCheckAsync(null);
+				_ = TShock.UpdateManager.UpdateCheckAsync(null);
 			}
 			catch (Exception)
 			{
@@ -2174,8 +2174,8 @@ namespace TShockAPI
 			if (args.Parameters.Count < 1)
 			{
 				args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax: {0}worldevent <event type>.", Specifier));
-				args.Player.SendErrorMessage(GetString("Valid event types: {0}.", String.Join(", ", _validEvents)));
-				args.Player.SendErrorMessage(GetString("Valid invasion types if spawning an invasion: {0}.", String.Join(", ", _validInvasions)));
+				args.Player.SendErrorMessage(GetString("Valid event types: {0}.", string.Join(", ", _validEvents)));
+				args.Player.SendErrorMessage(GetString("Valid invasion types if spawning an invasion: {0}.", string.Join(", ", _validInvasions)));
 				return;
 			}
 
@@ -2267,7 +2267,7 @@ namespace TShockAPI
 					return;
 
 				default:
-					args.Player.SendErrorMessage(GetString("Invalid event type. Valid event types: {0}.", String.Join(", ", _validEvents)));
+					args.Player.SendErrorMessage(GetString("Invalid event type. Valid event types: {0}.", string.Join(", ", _validEvents)));
 					return;
 			}
 		}
@@ -2360,7 +2360,7 @@ namespace TShockAPI
 				if (args.Parameters.Count < 2)
 				{
 					args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax:  {0}worldevent invasion [invasion type] [invasion wave].", Specifier));
-					args.Player.SendErrorMessage(GetString("Valid invasion types: {0}.", String.Join(", ", _validInvasions)));
+					args.Player.SendErrorMessage(GetString("Valid invasion types: {0}.", string.Join(", ", _validInvasions)));
 					return;
 				}
 
@@ -2428,7 +2428,7 @@ namespace TShockAPI
 						break;
 
 					default:
-						args.Player.SendErrorMessage(GetString("Invalid invasion type. Valid invasion types: {0}.", String.Join(", ", _validInvasions)));
+						args.Player.SendErrorMessage(GetString("Invalid invasion type. Valid invasion types: {0}.", string.Join(", ", _validInvasions)));
 						break;
 				}
 			}
@@ -2576,7 +2576,7 @@ namespace TShockAPI
 			if (args.Parameters.Count < 1)
 			{
 				args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax: {0}worldmode <mode>.", Specifier));
-				args.Player.SendErrorMessage(GetString("Valid world modes: {0}", String.Join(", ", _worldModes.Keys)));
+				args.Player.SendErrorMessage(GetString("Valid world modes: {0}", string.Join(", ", _worldModes.Keys)));
 				return;
 			}
 
@@ -2586,7 +2586,7 @@ namespace TShockAPI
 			{
 				if (mode < 0 || mode > 3)
 				{
-					args.Player.SendErrorMessage(GetString("Invalid world mode. Valid world modes: {0}", String.Join(", ", _worldModes.Keys)));
+					args.Player.SendErrorMessage(GetString("Invalid world mode. Valid world modes: {0}", string.Join(", ", _worldModes.Keys)));
 					return;
 				}
 			}
@@ -2596,7 +2596,7 @@ namespace TShockAPI
 			}
 			else
 			{
-				args.Player.SendErrorMessage(GetString("Invalid mode world mode. Valid modes: {0}", String.Join(", ", _worldModes.Keys)));
+				args.Player.SendErrorMessage(GetString("Invalid mode world mode. Valid modes: {0}", string.Join(", ", _worldModes.Keys)));
 				return;
 			}
 
@@ -3089,7 +3089,7 @@ namespace TShockAPI
 				return;
 			}
 
-			string playerName = String.Join(" ", args.Parameters);
+			string playerName = string.Join(" ", args.Parameters);
 			var players = TSPlayer.FindByNameOrID(playerName);
 			if (players.Count == 0)
 			{
@@ -3172,7 +3172,7 @@ namespace TShockAPI
 			var player = args.Player.Name;
 			if (args.Parameters.Count > 0)
 			{
-				player = String.Join(" ", args.Parameters);
+				player = string.Join(" ", args.Parameters);
 			}
 
 			var players = TSPlayer.FindByNameOrID(player);
@@ -3308,7 +3308,7 @@ namespace TShockAPI
 				{
 					string warpName = args.Parameters[1];
 					bool state = false;
-					if (Boolean.TryParse(args.Parameters[2], out state))
+					if (bool.TryParse(args.Parameters[2], out state))
 					{
 						if (TShock.Warps.Hide(args.Parameters[1], state))
 						{
@@ -3367,7 +3367,7 @@ namespace TShockAPI
 			}
 			else
 			{
-				string warpName = String.Join(" ", args.Parameters);
+				string warpName = string.Join(" ", args.Parameters);
 				var warp = TShock.Warps.Find(warpName);
 				if (warp != null)
 				{
@@ -3402,7 +3402,7 @@ namespace TShockAPI
 
 						string groupName = args.Parameters[1];
 						args.Parameters.RemoveRange(0, 2);
-						string permissions = String.Join(",", args.Parameters);
+						string permissions = string.Join(",", args.Parameters);
 
 						try
 						{
@@ -3649,7 +3649,7 @@ namespace TShockAPI
 						{
 							string newColor = args.Parameters[2];
 
-							String[] parts = newColor.Split(',');
+							string[] parts = newColor.Split(',');
 							byte r;
 							byte g;
 							byte b;
@@ -4061,7 +4061,7 @@ namespace TShockAPI
 							return;
 						}
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
 						{
 							TShock.ProjectileBans.AddNewBan(id);
 							args.Player.SendSuccessMessage(GetString("Banned projectile {0}.", id));
@@ -4081,7 +4081,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
 						{
 							if (!TShock.Groups.GroupExists(args.Parameters[2]))
 							{
@@ -4118,7 +4118,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
 						{
 							TShock.ProjectileBans.RemoveBan(id);
 							args.Player.SendSuccessMessage(GetString("Unbanned projectile {0}.", id));
@@ -4139,7 +4139,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id > 0 && id < Terraria.ID.ProjectileID.Count)
 						{
 							if (!TShock.Groups.GroupExists(args.Parameters[2]))
 							{
@@ -4199,7 +4199,7 @@ namespace TShockAPI
 						int pageNumber;
 						if (!PaginationTools.TryParsePageNumber(args.Parameters, 1, args.Player, out pageNumber))
 							return;
-						IEnumerable<Int16> projectileIds = from projectileBan in TShock.ProjectileBans.ProjectileBans
+						IEnumerable<short> projectileIds = from projectileBan in TShock.ProjectileBans.ProjectileBans
 														   select projectileBan.ID;
 						PaginationTools.SendPage(args.Player, pageNumber, PaginationTools.BuildLinesFromTerms(projectileIds),
 							new PaginationTools.Settings
@@ -4237,7 +4237,7 @@ namespace TShockAPI
 							return;
 						}
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
 						{
 							TShock.TileBans.AddNewBan(id);
 							args.Player.SendSuccessMessage(GetString("Banned tile {0}.", id));
@@ -4257,7 +4257,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
 						{
 							if (!TShock.Groups.GroupExists(args.Parameters[2]))
 							{
@@ -4294,7 +4294,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
 						{
 							TShock.TileBans.RemoveBan(id);
 							args.Player.SendSuccessMessage(GetString("Unbanned tile {0}.", id));
@@ -4315,7 +4315,7 @@ namespace TShockAPI
 						}
 
 						short id;
-						if (Int16.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
+						if (short.TryParse(args.Parameters[1], out id) && id >= 0 && id < Terraria.ID.TileID.Count)
 						{
 							if (!TShock.Groups.GroupExists(args.Parameters[2]))
 							{
@@ -4375,7 +4375,7 @@ namespace TShockAPI
 						int pageNumber;
 						if (!PaginationTools.TryParsePageNumber(args.Parameters, 1, args.Player, out pageNumber))
 							return;
-						IEnumerable<Int16> tileIds = from tileBan in TShock.TileBans.TileBans
+						IEnumerable<short> tileIds = from tileBan in TShock.TileBans.TileBans
 													 select tileBan.ID;
 						PaginationTools.SendPage(args.Player, pageNumber, PaginationTools.BuildLinesFromTerms(tileIds),
 							new PaginationTools.Settings
@@ -4465,7 +4465,7 @@ namespace TShockAPI
 				return;
 			}
 
-			if (String.Equals(args.Parameters[0], "default", StringComparison.CurrentCultureIgnoreCase))
+			if (string.Equals(args.Parameters[0], "default", StringComparison.CurrentCultureIgnoreCase))
 			{
 				TShock.Config.Settings.DefaultMaximumSpawns = NPC.defaultMaxSpawns = 5;
 				if (args.Silent)
@@ -4505,7 +4505,7 @@ namespace TShockAPI
 				return;
 			}
 
-			if (String.Equals(args.Parameters[0], "default", StringComparison.CurrentCultureIgnoreCase))
+			if (string.Equals(args.Parameters[0], "default", StringComparison.CurrentCultureIgnoreCase))
 			{
 				TShock.Config.Settings.DefaultSpawnRate = NPC.defaultSpawnRate = 600;
 				if (args.Silent)
@@ -4714,7 +4714,7 @@ namespace TShockAPI
 						{
 							if (!args.Player.TempPoints.Any(p => p == Point.Zero))
 							{
-								string regionName = String.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1));
+								string regionName = string.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1));
 								var x = Math.Min(args.Player.TempPoints[0].X, args.Player.TempPoints[1].X);
 								var y = Math.Min(args.Player.TempPoints[0].Y, args.Player.TempPoints[1].Y);
 								var width = Math.Abs(args.Player.TempPoints[0].X - args.Player.TempPoints[1].X);
@@ -4771,7 +4771,7 @@ namespace TShockAPI
 					{
 						if (args.Parameters.Count > 1)
 						{
-							string regionName = String.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1));
+							string regionName = string.Join(" ", args.Parameters.GetRange(1, args.Parameters.Count - 1));
 							if (TShock.Regions.DeleteRegion(regionName))
 							{
 								args.Player.SendInfoMessage(GetString("Deleted region \"{0}\".", regionName));
@@ -5429,7 +5429,7 @@ namespace TShockAPI
 			}
 
 			int givenCode;
-			if (!Int32.TryParse(args.Parameters[0], out givenCode) || givenCode != TShock.SetupToken)
+			if (!int.TryParse(args.Parameters[0], out givenCode) || givenCode != TShock.SetupToken)
 			{
 				args.Player.SendErrorMessage(GetString("Incorrect setup code. This incident has been logged."));
 				TShock.Log.Warn(args.Player.IP + " attempted to use an incorrect setup code.");
@@ -5458,7 +5458,7 @@ namespace TShockAPI
 			if (args.Player.mute)
 				args.Player.SendErrorMessage(GetString("You are muted."));
 			else
-				TSPlayer.All.SendMessage(GetString("*{0} {1}", args.Player.Name, String.Join(" ", args.Parameters)), 205, 133, 63);
+				TSPlayer.All.SendMessage(GetString("*{0} {1}", args.Player.Name, string.Join(" ", args.Parameters)), 205, 133, 63);
 		}
 
 		private static void PartyChat(CommandArgs args)
@@ -5474,7 +5474,7 @@ namespace TShockAPI
 				args.Player.SendErrorMessage(GetString("You are muted."));
 			else if (playerTeam != 0)
 			{
-				string msg = GetString("<{0}> {1}", args.Player.Name, String.Join(" ", args.Parameters));
+				string msg = GetString("<{0}> {1}", args.Player.Name, string.Join(" ", args.Parameters));
 				foreach (TSPlayer player in TShock.Players)
 				{
 					if (player != null && player.Active && player.Team == playerTeam)
@@ -5522,7 +5522,7 @@ namespace TShockAPI
 			{
 				string reason = GetString("No reason specified.");
 				if (args.Parameters.Count > 1)
-					reason = String.Join(" ", args.Parameters.ToArray(), 1, args.Parameters.Count - 1);
+					reason = string.Join(" ", args.Parameters.ToArray(), 1, args.Parameters.Count - 1);
 				var plr = players[0];
 				plr.mute = true;
 				if (args.Silent)
@@ -5995,7 +5995,7 @@ namespace TShockAPI
 				return;
 			}
 
-			string targetName = String.Join(" ", args.Parameters);
+			string targetName = string.Join(" ", args.Parameters);
 			var players = TSPlayer.FindByNameOrID(targetName);
 
 			if (players.Count == 0)
@@ -6039,7 +6039,7 @@ namespace TShockAPI
 					args.Player.SendErrorMessage(GetString("You do not have permission to respawn another player."));
 					return;
 				}
-				string plStr = String.Join(" ", args.Parameters);
+				string plStr = string.Join(" ", args.Parameters);
 				var players = TSPlayer.FindByNameOrID(plStr);
 				if (players.Count == 0)
 				{
@@ -6785,7 +6785,7 @@ namespace TShockAPI
 					args.Player.SendErrorMessage(GetString("You do not have permission to god mode another player."));
 					return;
 				}
-				string plStr = String.Join(" ", args.Parameters);
+				string plStr = string.Join(" ", args.Parameters);
 				var players = TSPlayer.FindByNameOrID(plStr);
 				if (players.Count == 0)
 				{

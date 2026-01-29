@@ -241,7 +241,7 @@ namespace TShockAPI
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return String.Format("{0},{1},{2},{3}", _netId, _stack, _prefixId, _favorited ? 1 : 0);
+			return string.Format("{0},{1},{2},{3}", _netId, _stack, _prefixId, _favorited ? 1 : 0);
 		}
 
 		/// <summary>
@@ -259,10 +259,10 @@ namespace TShockAPI
 			if (comp.Length != 4)
 				throw new FormatException("String does not contain 4 sections.");
 
-			int netId = Int32.Parse(comp[0]);
-			int stack = Int32.Parse(comp[1]);
-			byte prefixId = Byte.Parse(comp[2]);
-			bool favorited = Int32.Parse(comp[3]) == 1;
+			int netId = int.Parse(comp[0]);
+			int stack = int.Parse(comp[1]);
+			byte prefixId = byte.Parse(comp[2]);
+			bool favorited = int.Parse(comp[3]) == 1;
 
 			return new NetItem(netId, stack, prefixId, favorited);
 		}

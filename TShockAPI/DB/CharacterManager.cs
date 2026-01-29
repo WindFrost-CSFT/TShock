@@ -186,6 +186,7 @@ namespace TShockAPI.DB
 		/// Inserts player data to the tsCharacter database table
 		/// </summary>
 		/// <param name="player">player to take data from</param>
+		/// <param name="fromCommand">If <see langword="false"/>, the <see cref="Permissions.bypassssc"/> permission will be checked</param>
 		/// <returns>true if inserted successfully</returns>
 		public bool InsertPlayerData(TSPlayer player, bool fromCommand = false)
 		{

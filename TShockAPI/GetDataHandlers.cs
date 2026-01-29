@@ -1556,11 +1556,11 @@ namespace TShockAPI
 			/// <summary>
 			/// X Location
 			/// </summary>
-			public Int32 X { get; set; }
+			public int X { get; set; }
 			/// <summary>
 			/// Y Location
 			/// </summary>
-			public Int32 Y { get; set; }
+			public int Y { get; set; }
 			/// <summary>
 			/// Type
 			/// </summary>
@@ -1574,7 +1574,7 @@ namespace TShockAPI
 		/// NPCStrike - Called when an NPC is attacked
 		/// </summary>
 		public static HandlerList<PaintTileEventArgs> PaintTile = new HandlerList<PaintTileEventArgs>();
-		private static bool OnPaintTile(TSPlayer player, MemoryStream data, Int32 x, Int32 y, byte t, byte ct)
+		private static bool OnPaintTile(TSPlayer player, MemoryStream data, int x, int y, byte t, byte ct)
 		{
 			if (PaintTile == null)
 				return false;
@@ -1600,11 +1600,11 @@ namespace TShockAPI
 			/// <summary>
 			/// X Location
 			/// </summary>
-			public Int32 X { get; set; }
+			public int X { get; set; }
 			/// <summary>
 			/// Y Location
 			/// </summary>
-			public Int32 Y { get; set; }
+			public int Y { get; set; }
 			/// <summary>
 			/// Type
 			/// </summary>
@@ -1618,7 +1618,7 @@ namespace TShockAPI
 		/// Called When a wall is painted
 		/// </summary>
 		public static HandlerList<PaintWallEventArgs> PaintWall = new HandlerList<PaintWallEventArgs>();
-		private static bool OnPaintWall(TSPlayer player, MemoryStream data, Int32 x, Int32 y, byte t, byte cw)
+		private static bool OnPaintWall(TSPlayer player, MemoryStream data, int x, int y, byte t, byte cw)
 		{
 			if (PaintWall == null)
 				return false;
@@ -1644,7 +1644,7 @@ namespace TShockAPI
 			/// <summary>
 			/// ???
 			/// </summary>
-			public Int16 ID { get; set; }
+			public short ID { get; set; }
 			/// <summary>
 			/// Flag is a bit field
 			///   if the first bit is set -> 0 = player, 1 = NPC
@@ -1674,7 +1674,7 @@ namespace TShockAPI
 		/// NPCStrike - Called when an NPC is attacked
 		/// </summary>
 		public static HandlerList<TeleportEventArgs> Teleport = new HandlerList<TeleportEventArgs>();
-		private static bool OnTeleport(TSPlayer player, MemoryStream data, Int16 id, byte f, float x, float y, byte style, int extraInfo)
+		private static bool OnTeleport(TSPlayer player, MemoryStream data, short id, byte f, float x, float y, byte style, int extraInfo)
 		{
 			if (Teleport == null)
 				return false;
@@ -4625,7 +4625,8 @@ namespace TShockAPI
 				{
 					0 => NetItem.Loadout1Armor,
 					1 => NetItem.Loadout2Armor,
-					2 => NetItem.Loadout3Armor
+					2 => NetItem.Loadout3Armor,
+					_ => throw new NotImplementedException($"invalid lodout index {index}")
 				};
 			}
 
@@ -4635,7 +4636,8 @@ namespace TShockAPI
 				{
 					0 => NetItem.Loadout1Dye,
 					1 => NetItem.Loadout2Dye,
-					2 => NetItem.Loadout3Dye
+					2 => NetItem.Loadout3Dye,
+					_ => throw new NotImplementedException($"invalid lodout index {index}")
 				};
 			}
 

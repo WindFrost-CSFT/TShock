@@ -38,7 +38,7 @@ using Terraria.GameContent.Creative;
 namespace TShockAPI
 {
 	/// <summary>
-	/// Bitflags used with the <see cref="Disable(string, DisableFlags)"></see> method
+	/// Bitflags used with the <see cref="TSPlayer.Disable(string, DisableFlags)"></see> method
 	/// </summary>
 	[Flags]
 	public enum DisableFlags
@@ -121,7 +121,7 @@ namespace TShockAPI
 		/// If the string comes with tsi: or tsn:, we'll only return a list with one element,
 		/// either the player with the matching ID or name, respectively.
 		/// </summary>
-		/// <param name="plr">Player name or ID</param>
+		/// <param name="search">Player name or ID</param>
 		/// <returns>A list of matching players</returns>
 		public static List<TSPlayer> FindByNameOrID(string search)
 		{
@@ -1404,7 +1404,7 @@ namespace TShockAPI
 		/// Initializes a new instance of the <see cref="TSPlayer"/> class.
 		/// </summary>
 		/// <param name="playerName">The player's name.</param>
-		protected TSPlayer(String playerName)
+		protected TSPlayer(string playerName)
 		{
 			TilesDestroyed = new Dictionary<Vector2, ITile>();
 			TilesCreated = new Dictionary<Vector2, ITile>();
@@ -1943,7 +1943,6 @@ namespace TShockAPI
 		public void SendFileTextAsMessage(string file)
 		{
 			string foo = "";
-			bool containsOldFormat = false;
 			using (var tr = new StreamReader(file))
 			{
 				Color lineColor;
@@ -1966,7 +1965,7 @@ namespace TShockAPI
 					}
 
 					foo = foo.Replace("%map%", (TShock.Config.Settings.UseServerName ? TShock.Config.Settings.ServerName : Main.worldName));
-					foo = foo.Replace("%players%", String.Join(", ", players));
+					foo = foo.Replace("%players%", string.Join(", ", players));
 					foo = foo.Replace("%specifier%", TShock.Config.Settings.CommandSpecifier);
 					foo = foo.Replace("%onlineplayers%", TShock.Utils.GetActivePlayerCount().ToString());
 					foo = foo.Replace("%serverslots%", TShock.Config.Settings.MaxSlots.ToString());

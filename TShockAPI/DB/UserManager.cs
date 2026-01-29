@@ -347,10 +347,10 @@ namespace TShockAPI.DB
 		}
 
 		/// <summary>
-		/// Gets all user accounts from the database with a username that starts with or contains <see cref="username"/>
+		/// Gets all user accounts from the database with a username that starts with or contains <paramref name="username"/>
 		/// </summary>
 		/// <param name="username">Rough username search. "n" will match "n", "na", "nam", "name", etc</param>
-		/// <param name="notAtStart">If <see cref="username"/> is not the first part of the username. If true then "name" would match "name", "username", "wordsnamewords", etc</param>
+		/// <param name="notAtStart">If <see href="username"/> is not the first part of the username. If true then "name" would match "name", "username", "wordsnamewords", etc</param>
 		/// <returns>Matching users or null if exception is thrown</returns>
 		public List<UserAccount> GetUserAccountsByName(string username, bool notAtStart = false)
 		{

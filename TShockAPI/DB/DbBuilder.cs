@@ -35,7 +35,6 @@ public sealed class DbBuilder
 	/// <summary>
 	/// Builds a DB connection based on the provided configuration.
 	/// </summary>
-	/// <param name="config">The TShock configuration.</param>
 	/// <remarks>
 	/// Default settings will result in a local sqlite database file named "tshock.db" in the current directory to be used as server DB.
 	/// </remarks>

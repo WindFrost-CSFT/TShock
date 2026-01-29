@@ -172,7 +172,6 @@ namespace TShockAPI.DB
 						Permissions.item,
 						Permissions.give,
 						Permissions.heal,
-						Permissions.immunetoban,
 						Permissions.usebanneditem,
 						Permissions.allowclientsideworldedit,
 						Permissions.buff,

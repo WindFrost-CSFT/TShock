@@ -537,10 +537,10 @@ namespace TShockAPI
 		/// <param name="args">args - The PlayerPostLoginEventArgs object.</param>
 		private void OnPlayerLogin(PlayerPostLoginEventArgs args)
 		{
-			List<String> KnownIps = new List<string>();
+			List<string> KnownIps = new List<string>();
 			if (!string.IsNullOrWhiteSpace(args.Player.Account.KnownIps))
 			{
-				KnownIps = JsonConvert.DeserializeObject<List<String>>(args.Player.Account.KnownIps);
+				KnownIps = JsonConvert.DeserializeObject<List<string>>(args.Player.Account.KnownIps);
 			}
 
 			if (KnownIps.Count == 0)
@@ -1358,7 +1358,7 @@ namespace TShockAPI
 				return;
 			}
 
-			if (Config.Settings.KickEmptyUUID && String.IsNullOrWhiteSpace(player.UUID))
+			if (Config.Settings.KickEmptyUUID && string.IsNullOrWhiteSpace(player.UUID))
 			{
 				player.Kick(GetString("Your client sent a blank UUID. Configure it to send one or use a different client."), true, true, null, false);
 				args.Handled = true;
@@ -1481,7 +1481,7 @@ namespace TShockAPI
 			{
 				if (item.Value._name == args.CommandId._name)
 				{
-					if (!String.IsNullOrEmpty(text))
+					if (!string.IsNullOrEmpty(text))
 					{
 						text = EnglishLanguage.GetCommandPrefixByName(item.Value._name) + ' ' + text;
 					}
@@ -1525,7 +1525,7 @@ namespace TShockAPI
 				}
 				else if (!TShock.Config.Settings.EnableChatAboveHeads)
 				{
-					text = String.Format(Config.Settings.ChatFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix,
+					text = string.Format(Config.Settings.ChatFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix,
 											 args.Text);
 
 					//Invoke the PlayerChat hook. If this hook event is handled then we need to prevent sending the chat message
@@ -1543,7 +1543,7 @@ namespace TShockAPI
 				{
 					Player ply = Main.player[args.Who];
 					string name = ply.name;
-					ply.name = String.Format(Config.Settings.ChatAboveHeadsFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix);
+					ply.name = string.Format(Config.Settings.ChatAboveHeadsFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix);
 					//Update the player's name to format text nicely. This needs to be done because Terraria automatically formats messages against our will
 					NetMessage.SendData((int)PacketTypes.PlayerInfo, -1, -1, NetworkText.FromLiteral(ply.name), args.Who, 0, 0, 0, 0);
 
@@ -1568,8 +1568,8 @@ namespace TShockAPI
 					//Reset their name
 					NetMessage.SendData((int)PacketTypes.PlayerInfo, -1, -1, NetworkText.FromLiteral(name), args.Who, 0, 0, 0, 0);
 
-					string msg = String.Format("<{0}> {1}",
-						String.Format(Config.Settings.ChatAboveHeadsFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix),
+					string msg = string.Format("<{0}> {1}",
+						string.Format(Config.Settings.ChatAboveHeadsFormat, tsplr.Group.Name, tsplr.Group.Prefix, tsplr.Name, tsplr.Group.Suffix),
 						text
 					);
 

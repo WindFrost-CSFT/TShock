@@ -249,7 +249,7 @@ namespace TShockAPI
 		public List<Item> GetItemByIdOrName(string text)
 		{
 			int type = -1;
-			if (Int32.TryParse(text, out type))
+			if (int.TryParse(text, out type))
 			{
 				if (type >= Terraria.ID.ItemID.Count)
 					return new List<Item>();
@@ -335,11 +335,11 @@ namespace TShockAPI
 			if (!match.Success)
 				return null;
 			Item item = new Item();
-			item.netDefaults(Int32.Parse(match.Groups["NetID"].Value));
-			if (!String.IsNullOrWhiteSpace(match.Groups["Stack"].Value))
-				item.stack = Int32.Parse(match.Groups["Stack"].Value);
-			if (!String.IsNullOrWhiteSpace(match.Groups["Prefix"].Value))
-				item.prefix = Byte.Parse(match.Groups["Prefix"].Value);
+			item.netDefaults(int.Parse(match.Groups["NetID"].Value));
+			if (!string.IsNullOrWhiteSpace(match.Groups["Stack"].Value))
+				item.stack = int.Parse(match.Groups["Stack"].Value);
+			if (!string.IsNullOrWhiteSpace(match.Groups["Prefix"].Value))
+				item.prefix = byte.Parse(match.Groups["Prefix"].Value);
 			return item;
 		}
 
@@ -921,7 +921,7 @@ namespace TShockAPI
 		/// <returns>The <paramref name="text"/>, surrounded by the color tag with the appropriated hex code.</returns>
 		public string ColorTag(string text, Color color)
 		{
-			return String.Format("[c/{0}:{1}]", color.Hex3(), text);
+			return string.Format("[c/{0}:{1}]", color.Hex3(), text);
 		}
 
 		/// <summary>
@@ -935,7 +935,7 @@ namespace TShockAPI
 			int stack = item.stack;
 			int prefix = item.prefix;
 			string options = stack > 1 ? "/s" + stack : prefix != 0 ? "/p" + prefix : "";
-			return String.Format("[i{0}:{1}]", options, netID);
+			return string.Format("[i{0}:{1}]", options, netID);
 		}
 
 		/// <summary>

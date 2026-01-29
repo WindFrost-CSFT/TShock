@@ -155,7 +155,7 @@ namespace TShockAPI
 		/// <summary>
 		/// Creates a new instance of <see cref="Token"/>
 		/// </summary>
-		public Token() : base("token", true, GetString("The REST authentication token."), typeof(String)) { }
+		public Token() : base("token", true, GetString("The REST authentication token."), typeof(string)) { }
 	}
 
 	/// <summary>
@@ -300,7 +300,7 @@ namespace TShockAPI
 		[Description("Executes a remote command on the server, and returns the output of the command.")]
 		[RouteAttribute("/v3/server/rawcmd")]
 		[Permission(RestPermissions.restrawcommand)]
-		[Noun("cmd", true, "The command and arguments to execute.", typeof(String))]
+		[Noun("cmd", true, "The command and arguments to execute.", typeof(string))]
 		[Token]
 		private object ServerCommandV3(RestRequestArgs args)
 		{
@@ -321,7 +321,7 @@ namespace TShockAPI
 		[Route("/v2/server/off")]
 		[Permission(RestPermissions.restmaintenance)]
 		[Noun("confirm", true, "Required to confirm that actually want to turn the server off.", typeof(bool))]
-		[Noun("message", false, "The shutdown message.", typeof(String))]
+		[Noun("message", false, "The shutdown message.", typeof(string))]
 		[Noun("nosave", false, "Shutdown without saving.", typeof(bool))]
 		[Token]
 		private object ServerOff(RestRequestArgs args)
@@ -350,7 +350,7 @@ namespace TShockAPI
 
 		[Description("Broadcast a server wide message.")]
 		[Route("/v2/server/broadcast")]
-		[Noun("msg", true, "The message to broadcast.", typeof(String))]
+		[Noun("msg", true, "The message to broadcast.", typeof(string))]
 		[Token]
 		private object ServerBroadcast(RestRequestArgs args)
 		{
@@ -484,9 +484,9 @@ namespace TShockAPI
 		[Description("Create a new TShock user account.")]
 		[Route("/v2/users/create")]
 		[Permission(RestPermissions.restmanageusers)]
-		[Noun("user", true, "The user account name for the new account.", typeof(String))]
-		[Noun("group", false, "The group the new account should be assigned.", typeof(String))]
-		[Noun("password", true, "The password for the new account.", typeof(String))]
+		[Noun("user", true, "The user account name for the new account.", typeof(string))]
+		[Noun("group", false, "The group the new account should be assigned.", typeof(string))]
+		[Noun("password", true, "The password for the new account.", typeof(string))]
 		[Token]
 		private object UserCreateV2(RestRequestArgs args)
 		{
@@ -520,10 +520,10 @@ namespace TShockAPI
 		[Description("Update a users information.")]
 		[Route("/v2/users/update")]
 		[Permission(RestPermissions.restmanageusers)]
-		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(String))]
-		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(String))]
-		[Noun("password", false, "The users new password, and at least this or group must be defined.", typeof(String))]
-		[Noun("group", false, "The new group for the user, at least this or password must be defined.", typeof(String))]
+		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(string))]
+		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(string))]
+		[Noun("password", false, "The users new password, and at least this or group must be defined.", typeof(string))]
+		[Noun("group", false, "The new group for the user, at least this or password must be defined.", typeof(string))]
 		[Token]
 		private object UserUpdateV2(RestRequestArgs args)
 		{
@@ -571,8 +571,8 @@ namespace TShockAPI
 		[Description("Destroy a TShock user account.")]
 		[Route("/v2/users/destroy")]
 		[Permission(RestPermissions.restmanageusers)]
-		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(String))]
-		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(String))]
+		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(string))]
+		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(string))]
 		[Token]
 		private object UserDestroyV2(RestRequestArgs args)
 		{
@@ -595,8 +595,8 @@ namespace TShockAPI
 		[Description("List detailed information for a user account.")]
 		[Route("/v2/users/read")]
 		[Permission(RestPermissions.restviewusers)]
-		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(String))]
-		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(String))]
+		[Noun("user", true, "The search criteria (name or id of account to lookup).", typeof(string))]
+		[Noun("type", true, "The search criteria type (name for name lookup, id for id lookup).", typeof(string))]
 		[Token]
 		private object UserInfoV2(RestRequestArgs args)
 		{
@@ -615,10 +615,10 @@ namespace TShockAPI
 		[Description("Create a new ban entry.")]
 		[Route("/v3/bans/create")]
 		[Permission(RestPermissions.restmanagebans)]
-		[Noun("identifier", true, "The identifier to ban.", typeof(String))]
-		[Noun("reason", false, "The reason to assign to the ban.", typeof(String))]
-		[Noun("start", false, "The datetime at which the ban should start.", typeof(String))]
-		[Noun("end", false, "The datetime at which the ban should end.", typeof(String))]
+		[Noun("identifier", true, "The identifier to ban.", typeof(string))]
+		[Noun("reason", false, "The reason to assign to the ban.", typeof(string))]
+		[Noun("start", false, "The datetime at which the ban should start.", typeof(string))]
+		[Noun("end", false, "The datetime at which the ban should end.", typeof(string))]
 		[Token]
 		private object BanCreateV3(RestRequestArgs args)
 		{
@@ -675,7 +675,7 @@ namespace TShockAPI
 		[Description("Delete an existing ban entry.")]
 		[Route("/v3/bans/destroy")]
 		[Permission(RestPermissions.restmanagebans)]
-		[Noun("ticketNumber", true, "The ticket number of the ban to delete.", typeof(String))]
+		[Noun("ticketNumber", true, "The ticket number of the ban to delete.", typeof(string))]
 		[Noun("fullDelete", false, "Whether or not to completely remove the ban from the system.", typeof(bool))]
 		[Token]
 		private object BanDestroyV3(RestRequestArgs args)
@@ -702,7 +702,7 @@ namespace TShockAPI
 		[Description("View the details of a specific ban.")]
 		[Route("/v3/bans/read")]
 		[Permission(RestPermissions.restviewbans)]
-		[Noun("ticketNumber", true, "The ticket number to search for.", typeof(String))]
+		[Noun("ticketNumber", true, "The ticket number to search for.", typeof(string))]
 		[Token]
 		private object BanInfoV3(RestRequestArgs args)
 		{
@@ -923,7 +923,7 @@ namespace TShockAPI
 		[Description("Unmute a player.")]
 		[Route("/v2/players/unmute")]
 		[Permission(RestPermissions.restmute)]
-		[Noun("player", true, "The player to mute.", typeof(String))]
+		[Noun("player", true, "The player to mute.", typeof(string))]
 		[Token]
 		private object PlayerUnMute(RestRequestArgs args)
 		{
@@ -933,7 +933,7 @@ namespace TShockAPI
 		[Description("Mute a player.")]
 		[Route("/v2/players/mute")]
 		[Permission(RestPermissions.restmute)]
-		[Noun("player", true, "The player to mute.", typeof(String))]
+		[Noun("player", true, "The player to mute.", typeof(string))]
 		[Token]
 		private object PlayerMute(RestRequestArgs args)
 		{
@@ -967,7 +967,7 @@ namespace TShockAPI
 		[Description("Get information for a user.")]
 		[Route("/v3/players/read")]
 		[Permission(RestPermissions.restuserinfo)]
-		[Noun("player", true, "The player to lookup", typeof(String))]
+		[Noun("player", true, "The player to lookup", typeof(string))]
 		[Token]
 		private object PlayerReadV3(RestRequestArgs args)
 		{
@@ -998,7 +998,7 @@ namespace TShockAPI
 		[Description("Get information for a user.")]
 		[Route("/v4/players/read")]
 		[Permission(RestPermissions.restuserinfo)]
-		[Noun("player", true, "The player to lookup", typeof(String))]
+		[Noun("player", true, "The player to lookup", typeof(string))]
 		[Token]
 		private object PlayerReadV4(RestRequestArgs args)
 		{
@@ -1037,8 +1037,8 @@ namespace TShockAPI
 		[Description("Kick a player off the server.")]
 		[Route("/v2/players/kick")]
 		[Permission(RestPermissions.restkick)]
-		[Noun("player", true, "The player to kick.", typeof(String))]
-		[Noun("reason", false, "The reason the player was kicked.", typeof(String))]
+		[Noun("player", true, "The player to kick.", typeof(string))]
+		[Noun("reason", false, "The reason the player was kicked.", typeof(string))]
 		[Token]
 		private object PlayerKickV2(RestRequestArgs args)
 		{
@@ -1054,8 +1054,8 @@ namespace TShockAPI
 		[Description("Kill a player.")]
 		[Route("/v2/players/kill")]
 		[Permission(RestPermissions.restkill)]
-		[Noun("player", true, "The player to kick.", typeof(String))]
-		[Noun("from", false, "Who killed the player.", typeof(String))]
+		[Noun("player", true, "The player to kick.", typeof(string))]
+		[Noun("from", false, "Who killed the player.", typeof(string))]
 		[Token]
 		private object PlayerKill(RestRequestArgs args)
 		{
@@ -1091,7 +1091,7 @@ namespace TShockAPI
 		[Description("Display information of a group.")]
 		[Route("/v2/groups/read")]
 		[Permission(RestPermissions.restviewgroups)]
-		[Noun("group", true, "The group name to get information on.", typeof(String))]
+		[Noun("group", true, "The group name to get information on.", typeof(string))]
 		[Token]
 		private object GroupInfo(RestRequestArgs args)
 		{
@@ -1113,7 +1113,7 @@ namespace TShockAPI
 		[Description("Delete a group.")]
 		[Route("/v2/groups/destroy")]
 		[Permission(RestPermissions.restmanagegroups)]
-		[Noun("group", true, "The group name to delete.", typeof(String))]
+		[Noun("group", true, "The group name to delete.", typeof(string))]
 		[Token]
 		private object GroupDestroy(RestRequestArgs args)
 		{
@@ -1137,10 +1137,10 @@ namespace TShockAPI
 		[Description("Create a new group.")]
 		[Route("/v2/groups/create")]
 		[Permission(RestPermissions.restmanagegroups)]
-		[Noun("group", true, "The name of the new group.", typeof(String))]
-		[Noun("parent", false, "The name of the parent group.", typeof(String))]
-		[Noun("permissions", false, "A comma separated list of permissions for the new group.", typeof(String))]
-		[Noun("chatcolor", false, "A r,g,b string representing the color for this groups chat.", typeof(String))]
+		[Noun("group", true, "The name of the new group.", typeof(string))]
+		[Noun("parent", false, "The name of the parent group.", typeof(string))]
+		[Noun("permissions", false, "A comma separated list of permissions for the new group.", typeof(string))]
+		[Noun("chatcolor", false, "A r,g,b string representing the color for this groups chat.", typeof(string))]
 		[Token]
 		private object GroupCreate(RestRequestArgs args)
 		{
@@ -1161,10 +1161,10 @@ namespace TShockAPI
 
 		[Route("/v2/groups/update")]
 		[Permission(RestPermissions.restmanagegroups)]
-		[Noun("group", true, "The name of the group to modify.", typeof(String))]
-		[Noun("parent", false, "The name of the new parent for this group.", typeof(String))]
-		[Noun("chatcolor", false, "The new chat color r,g,b.", typeof(String))]
-		[Noun("permissions", false, "The new comma separated list of permissions.", typeof(String))]
+		[Noun("group", true, "The name of the group to modify.", typeof(string))]
+		[Noun("parent", false, "The name of the new parent for this group.", typeof(string))]
+		[Noun("chatcolor", false, "The new chat color r,g,b.", typeof(string))]
+		[Noun("permissions", false, "The new comma separated list of permissions.", typeof(string))]
 		[Token]
 		private object GroupUpdate(RestRequestArgs args)
 		{
@@ -1218,7 +1218,7 @@ namespace TShockAPI
 					var permission = method.GetCustomAttributes(false).Where(o => o is Permission);
 					if (permission.Any())
 					{
-						sb.AppendLine(GetString("* **Permissions**: `{0}`", String.Join(", ", permission.Select(p => ((Permission)p).Name))));
+						sb.AppendLine(GetString("* **Permissions**: `{0}`", string.Join(", ", permission.Select(p => ((Permission)p).Name))));
 					}
 					else
 					{
@@ -1252,7 +1252,7 @@ namespace TShockAPI
 					}
 					sb.AppendLine();
 					sb.AppendLine(GetString("**Example Usage**: `{0}?{1}`", routeattr.Route,
-						string.Join("&", nouns.Select(n => String.Format("{0}={0}", ((Noun)n).Name)))));
+						string.Join("&", nouns.Select(n => string.Format("{0}={0}", ((Noun)n).Name)))));
 					sb.AppendLine();
 				}
 			}

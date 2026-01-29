@@ -208,7 +208,7 @@ namespace TShockAPI
 		public virtual bool HasPermission(string permission)
 		{
 			bool negated = false;
-			if (String.IsNullOrEmpty(permission) || (RealHasPermission(permission, ref negated) && !negated))
+			if (string.IsNullOrEmpty(permission) || (RealHasPermission(permission, ref negated) && !negated))
 			{
 				return true;
 			}
@@ -220,7 +220,7 @@ namespace TShockAPI
 			for (int i = nodes.Length - 1; i >= 0; i--)
 			{
 				nodes[i] = "*";
-				if (RealHasPermission(String.Join(".", nodes, 0, i + 1), ref negated))
+				if (RealHasPermission(string.Join(".", nodes, 0, i + 1), ref negated))
 				{
 					return !negated;
 				}

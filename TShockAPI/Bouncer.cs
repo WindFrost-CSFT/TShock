@@ -458,7 +458,7 @@ namespace TShockAPI
 			}
 			args.Player.RequestedSection = true;
 
-			if (String.IsNullOrEmpty(args.Player.Name))
+			if (string.IsNullOrEmpty(args.Player.Name))
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnGetSection rejected empty player name."));
 				args.Player.Kick(GetString("Your client sent a blank character name."), true, true);
@@ -484,7 +484,7 @@ namespace TShockAPI
 			var pos = args.Position;
 			var vel = args.Velocity;
 
-			if (Single.IsInfinity(vel.X) || Single.IsInfinity(vel.Y))
+			if (float.IsInfinity(vel.X) || float.IsInfinity(vel.Y))
 			{
 				TShock.Log.ConsoleInfo(GetString("Bouncer / OnPlayerUpdate force kicked (attempted to set velocity to infinity) from {0}", args.Player.Name));
 				args.Player.Kick(GetString("Detected DOOM set to ON position."), true, true);
@@ -492,7 +492,7 @@ namespace TShockAPI
 				return;
 			}
 
-			if (Single.IsNaN(vel.X) || Single.IsNaN(vel.Y))
+			if (float.IsNaN(vel.X) || float.IsNaN(vel.Y))
 			{
 				TShock.Log.ConsoleInfo(GetString("Bouncer / OnPlayerUpdate force kicked (attempted to set velocity to NaN) from {0}", args.Player.Name));
 				args.Player.Kick(GetString("Detected DOOM set to ON position."), true, true);
@@ -797,17 +797,17 @@ namespace TShockAPI
 						return;
 					}
 
-					/// Handle placement action if the player is using an Ice Rod but not placing the iceblock.
+					// Handle placement action if the player is using an Ice Rod but not placing the iceblock.
 					if (selectedItem.type == ItemID.IceRod && editData != TileID.MagicalIceBlock)
 					{
 						TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from using ice rod but not placing ice block {0} {1} {2}", args.Player.Name, action, editData));
 						args.Player.SendTileSquareCentered(tileX, tileY, 4);
 						args.Handled = true;
 					}
-					/// If they aren't selecting the item which creates the tile, they're hacking.
+					// If they aren't selecting the item which creates the tile, they're hacking.
 					if ((action == EditAction.PlaceTile || action == EditAction.ReplaceTile) && editData != selectedItem.createTile)
 					{
-						/// These would get caught up in the below check because Terraria does not set their createTile field.
+						// These would get caught up in the below check because Terraria does not set their createTile field.
 						if (selectedItem.type != ItemID.IceRod && selectedItem.type != ItemID.DirtBomb && selectedItem.type != ItemID.StickyBomb && (args.Player.TPlayer.mount.Type != MountID.DiggingMoleMinecart || editData != TileID.MinecartTrack))
 						{
 							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from tile placement not matching selected item createTile {0} {1} {2} selectedItemID:{3} createTile:{4}", args.Player.Name, action, editData, selectedItem.type, selectedItem.createTile));
@@ -816,7 +816,7 @@ namespace TShockAPI
 							return;
 						}
 					}
-					/// If they aren't selecting the item which creates the wall, they're hacking.
+					// If they aren't selecting the item which creates the wall, they're hacking.
 					if ((action == EditAction.PlaceWall || action == EditAction.ReplaceWall) && editData != selectedItem.createWall)
 					{
 						TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from wall placement not matching selected item createWall {0} {1} {2} selectedItemID:{3} createWall:{4}", args.Player.Name, action, editData, selectedItem.type, selectedItem.createWall));
@@ -1263,7 +1263,7 @@ namespace TShockAPI
 				return;
 			}
 
-			/// If the projectile is a directional projectile, check if the player is holding their respected item to validate the projectile creation.
+			// If the projectile is a directional projectile, check if the player is holding their respected item to validate the projectile creation.
 			if (directionalProjectiles.ContainsKey(type))
 			{
 				if (directionalProjectiles[type] == args.Player.TPlayer.HeldItem.type)
@@ -1273,14 +1273,14 @@ namespace TShockAPI
 				}
 			}
 
-			/// If the created projectile is a golf club, check if the player is holding one of the golf club items to validate the projectile creation.
+			// If the created projectile is a golf club, check if the player is holding one of the golf club items to validate the projectile creation.
 			if (type == ProjectileID.GolfClubHelper && Handlers.LandGolfBallInCupHandler.GolfClubItemIDs.Contains(args.Player.TPlayer.HeldItem.type))
 			{
 				args.Handled = false;
 				return;
 			}
 
-			/// If the created projectile is a golf ball and the player is not holding a golf club item and neither a golf ball item and neither they have had a golf club projectile created recently.
+			// If the created projectile is a golf ball and the player is not holding a golf club item and neither a golf ball item and neither they have had a golf club projectile created recently.
 			if (Handlers.LandGolfBallInCupHandler.GolfBallProjectileIDs.Contains(type) &&
 				!Handlers.LandGolfBallInCupHandler.GolfClubItemIDs.Contains(args.Player.TPlayer.HeldItem.type) &&
 				!Handlers.LandGolfBallInCupHandler.GolfBallItemIDs.Contains(args.Player.TPlayer.HeldItem.type) &&
@@ -2820,7 +2820,7 @@ namespace TShockAPI
 		/// <param name="args"></param>
 		internal void OnFishOutNPC(object sender, GetDataHandlers.FishOutNPCEventArgs args)
 		{
-			/// Getting recent projectiles of the player and selecting the first that is a bobber.
+			// Getting recent projectiles of the player and selecting the first that is a bobber.
 			var projectile = args.Player.RecentlyCreatedProjectiles.FirstOrDefault(p => Main.projectile[p.Index].bobber);
 
 			if (!FishingRodItemIDs.Contains(args.Player.SelectedItem.type))
@@ -2829,7 +2829,7 @@ namespace TShockAPI
 				args.Handled = true;
 				return;
 			}
-			if (projectile.Type == 0 || projectile.Killed) /// The bobber projectile is never killed when the NPC spawns. Type can only be 0 if no recent projectile is found that is named Bobber.
+			if (projectile.Type == 0 || projectile.Killed) // The bobber projectile is never killed when the NPC spawns. Type can only be 0 if no recent projectile is found that is named Bobber.
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnFishOutNPC rejected for not finding active bobber projectile! - From {0}", args.Player.Name));
 				args.Handled = true;
@@ -3062,7 +3062,7 @@ namespace TShockAPI
 		/// </summary>
 		private static Dictionary<int, int> directionalProjectiles = new Dictionary<int, int>()
 		{
-			///Spears
+			//Spears
 			{ ProjectileID.DarkLance, ItemID.DarkLance},
 			{ ProjectileID.Trident, ItemID.Trident},
 			{ ProjectileID.Spear, ItemID.Spear},
@@ -3082,7 +3082,7 @@ namespace TShockAPI
 			{ ProjectileID.MonkStaffT2, ItemID.MonkStaffT2},
 			{ ProjectileID.ThunderSpear, ItemID.ThunderSpear},
 			{ ProjectileID.GladiusStab, ItemID.Gladius},
-			/// ShortSwords
+			// ShortSwords
 			{ ProjectileID.RulerStab, ItemID.Ruler },
 			{ ProjectileID.CopperShortswordStab, ItemID.CopperShortsword },
 			{ ProjectileID.TinShortswordStab, ItemID.TinShortsword },

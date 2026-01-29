@@ -145,6 +145,7 @@ namespace TShockAPI
 		/// Writes a debug string to the log file. Only works if the DebugLogs config option is set to true.
 		/// </summary>
 		/// <param name="message">The message to be written.</param>
+		/// <param name="args">format args</param>
 		void ConsoleDebug(string message, params object[] args);
 
 		/// <summary>

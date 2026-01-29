@@ -184,27 +184,27 @@ namespace TShockAPI.DB
 				(s, i) => s.IsDBNull(i) ? null : (object)s.GetByte(i)
 			},
 			{
-				typeof (Int16),
+				typeof (short),
 				(s, i) => s.GetInt16(i)
 			},
 			{
-				typeof (Int16?),
+				typeof (short?),
 				(s, i) => s.IsDBNull(i) ? null : (object)s.GetInt16(i)
 			},
 			{
-				typeof (Int32),
+				typeof (int),
 				(s, i) => s.GetInt32(i)
 			},
 			{
-				typeof (Int32?),
+				typeof (int?),
 				(s, i) => s.IsDBNull(i) ? null : (object)s.GetInt32(i)
 			},
 			{
-				typeof (Int64),
+				typeof (long),
 				(s, i) => s.GetInt64(i)
 			},
 			{
-				typeof (Int64?),
+				typeof (long?),
 				(s, i) => s.IsDBNull(i) ? null : (object)s.GetInt64(i)
 			},
 			{
