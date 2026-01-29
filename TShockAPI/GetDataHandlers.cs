@@ -2610,14 +2610,14 @@ namespace TShockAPI
 
 			// Players send a slot update packet for each inventory slot right after they've joined.
 			bool bypassTrashCanCheck = false;
-			if (plr == args.Player.Index && !args.Player.HasSentInventory && slot == NetItem.MaxInventory)
+			if (plr == args.Player.Index && !args.Player.HasSentInventory && slot == PlayerItemSlotID.Count - 1)
 			{
 				args.Player.HasSentInventory = true;
 				bypassTrashCanCheck = true;
 			}
 
 			if (OnPlayerSlot(args.Player, args.Data, plr, slot, stack, prefix, type) || plr != args.Player.Index || slot < 0 ||
-				slot > NetItem.MaxInventory)
+				slot > PlayerItemSlotID.Count - 1)
 				return true;
 			// if (args.Player.IgnoreSSCPackets)
 			// {
