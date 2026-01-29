@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <Reference Include="OTAPI">
+		  <HintPath>..\lib\OTAPI.dll</HintPath>
+	  </Reference>
+	  <Reference Include="OTAPI.Runtime">
+		  <HintPath>..\lib\OTAPI.Runtime.dll</HintPath>
+	  </Reference>
     <ProjectReference Include="..\TShockAPI\TShockAPI.csproj" />
     <ProjectReference Include="..\TShockLauncher\TShockLauncher.csproj" />
   </ItemGroup>

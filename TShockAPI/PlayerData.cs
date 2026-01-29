@@ -614,13 +614,16 @@ namespace TShockAPI
 
 				}
 			}
+			// 别删了，ItemOwner那边应该是依赖于原版的一个行为会发包恢复，现在好像没了，先用这个
+			player.IgnoreSSCPackets = false;
 		}
 
-		public static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)
+		private static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)
 		{
-
 			for (int index = 0; index < array.Length; ++index)
-				NetMessage.TrySendData(5, number: plr, number2: (float) (slotStartIndex + index),remoteClient: remoteClient, ignoreClient: ignoreClient);
+			{
+				NetMessage.TrySendData(5, number: plr, number2: slotStartIndex + index, remoteClient: remoteClient, ignoreClient: ignoreClient);
+			}
 		}
 	}
 }
