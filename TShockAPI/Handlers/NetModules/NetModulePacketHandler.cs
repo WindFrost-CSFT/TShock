@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Terraria;
+
 using static TShockAPI.GetDataHandlers;
 
 namespace TShockAPI.Handlers.NetModules

@@ -24,7 +24,7 @@
     <Product>TShockAPI</Product>
     <Copyright>Copyright © Pryaxis &amp; TShock Contributors 2011-2025</Copyright>
     <!-- extras for nuget -->
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>-->
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <Authors>Pryaxis &amp; TShock Contributors</Authors>
     <Description>TShock is a toolbox for Terraria servers and communities.</Description>
