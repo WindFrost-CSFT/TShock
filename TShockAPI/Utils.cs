@@ -1065,7 +1065,7 @@ namespace TShockAPI
 				output.Append("[[");
 				output.Append(g.Name);
 				output.Append("]]");
-				output.Append("|");
+				output.Append('|');
 			}
 
 			output.AppendLine();
@@ -1091,7 +1091,7 @@ namespace TShockAPI
 					}
 					else
 					{
-						output.Append("|");
+						output.Append('|');
 					}
 				}
 				output.AppendLine();
@@ -1192,13 +1192,11 @@ namespace TShockAPI
 				item.netDefaults(i);
 				if (item.placeStyle >= 0)
 				{
-					if (GetDataHandlers.MaxPlaceStyles.ContainsKey(item.createTile))
+					if (!GetDataHandlers.MaxPlaceStyles.TryAdd(item.createTile, item.placeStyle))
 					{
 						if (item.placeStyle > GetDataHandlers.MaxPlaceStyles[item.createTile])
 							GetDataHandlers.MaxPlaceStyles[item.createTile] = item.placeStyle;
 					}
-					else
-						GetDataHandlers.MaxPlaceStyles.Add(item.createTile, item.placeStyle);
 				}
 			}
 		}

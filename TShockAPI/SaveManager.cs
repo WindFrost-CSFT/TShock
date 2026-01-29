@@ -38,8 +38,8 @@ namespace TShockAPI
 		public static SaveManager Instance { get { return instance; } }
 
 		// Producer Consumer
-		private EventWaitHandle _wh = new AutoResetEvent(false);
-		private Object _saveLock = new Object();
+		private AutoResetEvent _wh = new AutoResetEvent(false);
+		private object _saveLock = new object();
 		private Queue<SaveTask> _saveQueue = new Queue<SaveTask>();
 		private Thread _saveThread;
 		private int saveQueueCount { get { lock (_saveLock) return _saveQueue.Count; } }

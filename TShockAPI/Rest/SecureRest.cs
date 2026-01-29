@@ -67,13 +67,9 @@ namespace Rests
 
 		private void AddTokenToBucket(string ip)
 		{
-			if (tokenBucket.ContainsKey(ip))
+			if (!tokenBucket.TryAdd(ip, 1))
 			{
 				tokenBucket[ip] += 1;
-			}
-			else
-			{
-				tokenBucket.Add(ip, 1);
 			}
 		}
 

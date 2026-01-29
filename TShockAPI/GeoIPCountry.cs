@@ -293,7 +293,7 @@ namespace MaxMind
 				throw new IOException("Cannot seek GeoIP database");
 
 			_geodata.Seek(6*offset, SeekOrigin.Begin);
-			_geodata.Read(buffer, 0, 6);
+			_geodata.ReadExactly(buffer, 0, 6);
 
 			for (int i = 0; i < 2; i++)
 			{

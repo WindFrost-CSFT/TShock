@@ -274,7 +274,7 @@ namespace TShockAPI
 		/// <param name="permission">The permission to add.</param>
 		public virtual void AddPermission(string permission)
 		{
-			if (permission.StartsWith("!"))
+			if (permission.StartsWith('!'))
 			{
 				NegatePermission(permission.Substring(1));
 				return;
@@ -306,7 +306,7 @@ namespace TShockAPI
 		/// <param name="permission"></param>
 		public virtual void RemovePermission(string permission)
 		{
-			if (permission.StartsWith("!"))
+			if (permission.StartsWith('!'))
 			{
 				negatedpermissions.Remove(permission.Substring(1));
 				return;

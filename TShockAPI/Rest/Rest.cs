@@ -378,10 +378,10 @@ namespace Rests
 				uri = uri.TrimEnd('/');
 				string upgrade = null;
 
-				if (redirects.ContainsKey(uri))
+				if (redirects.TryGetValue(uri, out var value))
 				{
-					upgrade = redirects[uri].Item2;
-					uri = redirects[uri].Item1;
+					upgrade = value.Item2;
+					uri = value.Item1;
 				}
 
 				foreach (var com in commands)
@@ -398,7 +398,7 @@ namespace Rests
 						for (int i = 0; i < com.UriVerbs.Length; i++)
 							verbs.Add(com.UriVerbs[i], match.Groups[i + 1].Value);
 					}
-					else if (com.UriTemplate.ToLower() != uri.ToLower())
+					else if (string.Equals(com.UriTemplate, uri, StringComparison.OrdinalIgnoreCase))
 					{
 						continue;
 					}

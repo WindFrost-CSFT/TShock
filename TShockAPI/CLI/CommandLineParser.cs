@@ -147,12 +147,11 @@ namespace TShockAPI.CLI
 		/// <returns></returns>
 		public T Get<T>(FlagSet flags)
 		{
-			if (!_results.ContainsKey(flags))
+			if (!_results.TryGetValue(flags, out object result))
 			{
 				return default(T);
 			}
 
-			object result = _results[flags];
 			Type t = typeof(T);
 
 			if (t == typeof(string))

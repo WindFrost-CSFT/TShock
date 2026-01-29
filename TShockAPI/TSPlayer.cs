@@ -155,14 +155,13 @@ namespace TShockAPI
 				}
 			}
 
-			string searchLower = search.ToLower();
 			foreach (TSPlayer player in TShock.Players)
 			{
 				if (player != null)
 				{
 					if ((search == player.Name) && exactNameOnly)
 						return new List<TSPlayer> { player };
-					if (player.Name.ToLower().StartsWith(searchLower))
+					if (player.Name.StartsWith(search, StringComparison.CurrentCultureIgnoreCase))
 						found.Add(player);
 				}
 			}
@@ -1895,7 +1894,7 @@ namespace TShockAPI
 		/// <param name="blue">The amount of blue color to factor in. Max: 255</param>
 		public virtual void SendMessage(string msg, byte red, byte green, byte blue)
 		{
-			if (msg.Contains("\n"))
+			if (msg.Contains('\n'))
 			{
 				string[] msgs = msg.Split('\n');
 				foreach (string message in msgs)
@@ -1925,7 +1924,7 @@ namespace TShockAPI
 		/// <param name="ply">The player who receives the message.</param>
 		public virtual void SendMessageFromPlayer(string msg, byte red, byte green, byte blue, int ply)
 		{
-			if (msg.Contains("\n"))
+			if (msg.Contains('\n'))
 			{
 				string[] msgs = msg.Split('\n');
 				foreach (string message in msgs)
@@ -2291,10 +2290,7 @@ namespace TShockAPI
 		/// <param name="callback">The method that will be executed on confirmation ie user accepts</param>
 		public void AddResponse(string name, Action<object> callback)
 		{
-			if (AwaitingResponse.ContainsKey(name))
-			{
-				AwaitingResponse.Remove(name);
-			}
+			AwaitingResponse.Remove(name);
 
 			AwaitingResponse.Add(name, callback);
 		}

@@ -80,7 +80,7 @@ public class MysqlQueryBuilder : GenericQueryBuilder, IQueryBuilder
 			return ret + (length is not null ? "({0})".SFormat((int)length) : "");
 		}
 
-		throw new NotImplementedException(Enum.GetName(typeof(MySqlDbType), type));
+		throw new NotImplementedException(Enum.GetName(type));
 	}
 
 	/// <inheritdoc />

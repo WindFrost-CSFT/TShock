@@ -253,8 +253,7 @@ namespace TShockAPI
 		/// <returns></returns>
 		public static NetItem Parse(string str)
 		{
-			if (str == null)
-				throw new ArgumentNullException("str");
+			ArgumentNullException.ThrowIfNull(str);
 
 			string[] comp = str.Split(',');
 			if (comp.Length != 4)

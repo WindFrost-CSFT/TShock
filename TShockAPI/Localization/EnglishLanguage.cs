@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.Initializers;
 using Terraria.Localization;
 using Terraria.UI.Chat;
@@ -54,22 +55,22 @@ namespace TShockAPI.Localization
 					LanguageManager.Instance.SetLanguage(GameCulture.FromCultureName(GameCulture.CultureName.English));
 				}
 
-				for (var i = -48; i < Terraria.ID.ItemID.Count; i++)
+				for (var i = -48; i < ItemID.Count; i++)
 				{
 					ItemNames.Add(i, Lang.GetItemNameValue(i));
 				}
 
-				for (var i = -17; i < Terraria.ID.NPCID.Count; i++)
+				for (var i = -17; i < NPCID.Count; i++)
 				{
 					NpcNames.Add(i, Lang.GetNPCNameValue(i));
 				}
 
-				for (var i = 0; i < Terraria.ID.BuffID.Count; i++)
+				for (var i = 0; i < BuffID.Count; i++)
 				{
 					Buffs.Add(i, Lang.GetBuffName(i));
 				}
 
-				foreach (var field in typeof(Main).Assembly.GetType("Terraria.ID.PrefixID")
+				foreach (var field in typeof(PrefixID)
 							.GetFields().Where(f => !f.Name.Equals("Count", StringComparison.Ordinal)))
 				{
 					var i = (int)field.GetValue(null);

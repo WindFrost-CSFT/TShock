@@ -224,7 +224,7 @@ namespace TShockAPI
 					matches = Directory.GetFiles(x64, "*" + libraryName + "*", SearchOption.AllDirectories);
 			}
 
-			if (matches.Count() == 0)
+			if (!matches.Any())
 			{
 				matches = Directory.GetFiles(Environment.CurrentDirectory, "*" + libraryName + "*");
 			}
@@ -329,7 +329,7 @@ namespace TShockAPI
 					File.Delete(Path.Combine(SavePath, "tshock.pid"));
 				}
 				File.WriteAllText(Path.Combine(SavePath, "tshock.pid"),
-					Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture));
+					Environment.ProcessId.ToString(CultureInfo.InvariantCulture));
 
 				CliParser.Reset();
 				HandleCommandLinePostConfigLoad(Environment.GetCommandLineArgs());
@@ -992,7 +992,7 @@ namespace TShockAPI
 			}
 
 			// Disable the auth system if "setup.lock" is present or a user account already exists
-			if (File.Exists(Path.Combine(SavePath, "setup.lock")) || (UserAccounts.GetUserAccounts().Count() > 0))
+			if (File.Exists(Path.Combine(SavePath, "setup.lock")) || (UserAccounts.GetUserAccounts().Count > 0))
 			{
 				SetupToken = 0;
 

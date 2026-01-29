@@ -36,8 +36,7 @@ namespace Rests
 		{
 			get
 			{
-				string ret;
-				if (TryGetValue(key, out ret))
+				if (TryGetValue(key, out string ret))
 				{
 					return Uri.UnescapeDataString(ret);
 				}

@@ -43,10 +43,7 @@ namespace TShockAPI.CLI
 		/// <param name="flags">Flags represented by this FlagSet</param>
 		public FlagSet(params string[] flags)
 		{
-			if (flags == null)
-			{
-				throw new ArgumentNullException(nameof(flags));
-			}
+			ArgumentNullException.ThrowIfNull(flags);
 
 			_flags = flags.Select(f => f.ToLowerInvariant());
 		}

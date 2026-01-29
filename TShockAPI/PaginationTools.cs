@@ -42,8 +42,7 @@ namespace TShockAPI
 				get { return this.headerFormat; }
 				set
 				{
-					if (value == null)
-						throw new ArgumentNullException();
+					ArgumentNullException.ThrowIfNull(value);
 
 					this.headerFormat = value;
 				}
@@ -58,8 +57,7 @@ namespace TShockAPI
 				get { return this.footerFormat; }
 				set
 				{
-					if (value == null)
-						throw new ArgumentNullException();
+					ArgumentNullException.ThrowIfNull(value);
 
 					this.footerFormat = value;
 				}

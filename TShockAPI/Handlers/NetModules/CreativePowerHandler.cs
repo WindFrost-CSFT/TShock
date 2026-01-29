@@ -48,13 +48,11 @@ namespace TShockAPI.Handlers.NetModules
 		/// <returns></returns>
 		public static bool HasPermission(CreativePowerTypes powerType, TSPlayer player)
 		{
-			if (!PowerToPermissionMap.ContainsKey(powerType))
+			if (!PowerToPermissionMap.TryGetValue(powerType, out string permission))
 			{
 				TShock.Log.ConsoleDebug(GetString("CreativePowerHandler received permission check request for unknown creative power"));
 				return false;
 			}
-
-			string permission = PowerToPermissionMap[powerType];
 
 			//prevent being told about the spawnrate permission on join until relogic fixes
 			if (!player.HasReceivedNPCPermissionError && powerType == CreativePowerTypes.SetSpawnRate)

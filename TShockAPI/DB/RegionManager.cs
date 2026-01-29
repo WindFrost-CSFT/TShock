@@ -84,7 +84,7 @@ namespace TShockAPI.DB
 					string groups = reader.Get<string>("Groups");
 					int z = reader.Get<int>("Z");
 
-					string[] splitids = mergedids.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+					string[] splitids = mergedids.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
 					Region r = new Region(id, new Rectangle(X1, Y1, width, height), name, owner, Protected != 0, Main.worldID.ToString(), z);
 					r.SetAllowedGroups(groups);
@@ -779,8 +779,7 @@ namespace TShockAPI.DB
 
 			foreach (string id in idArr)
 			{
-				int i = 0;
-				if (int.TryParse(id, out i) && i != 0)
+				if (int.TryParse(id, out var i) && i != 0)
 				{
 					idList.Add(i);
 				}

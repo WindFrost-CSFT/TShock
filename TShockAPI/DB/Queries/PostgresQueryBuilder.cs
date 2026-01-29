@@ -43,7 +43,7 @@ public class PostgresQueryBuilder : GenericQueryBuilder
 		MySqlDbType.Int64 => "BIGINT",
 		MySqlDbType.DateTime => "TIMESTAMP",
 
-		_ => throw new NotImplementedException(Enum.GetName(typeof(MySqlDbType), type))
+		_ => throw new NotImplementedException(Enum.GetName(type))
 	};
 
 	/// <inheritdoc />
@@ -79,7 +79,7 @@ public class PostgresQueryBuilder : GenericQueryBuilder
 			.Where(c => c.Unique).Select(c => c.Name)
 			.ToArray(); // No re-enumeration
 
-		return $"CREATE TABLE {EscapeTableName(table.Name)} ({string.Join(", ", columns)} {(uniques.Any() ? ", UNIQUE({0})".SFormat(string.Join(", ", uniques)) : "")})";
+		return $"CREATE TABLE {EscapeTableName(table.Name)} ({string.Join(", ", columns)} {(uniques.Length != 0 ? ", UNIQUE({0})".SFormat(string.Join(", ", uniques)) : "")})";
 	}
 
 	/// <inheritdoc />

@@ -515,7 +515,7 @@ namespace TShockAPI.DB
 			if (password.Trim().Length < Math.Max(4, TShock.Config.Settings.MinimumPasswordLength))
 			{
 				int minLength = TShock.Config.Settings.MinimumPasswordLength;
-				throw new ArgumentOutOfRangeException("password", GetString($"Password must be at least {minLength} characters."));
+				throw new ArgumentOutOfRangeException(nameof(password), GetString($"Password must be at least {minLength} characters."));
 			}
 			try
 			{
@@ -536,7 +536,7 @@ namespace TShockAPI.DB
 			if (password.Trim().Length < Math.Max(4, TShock.Config.Settings.MinimumPasswordLength))
 			{
 				int minLength = TShock.Config.Settings.MinimumPasswordLength;
-				throw new ArgumentOutOfRangeException("password", GetString($"Password must be at least {minLength} characters."));
+				throw new ArgumentOutOfRangeException(nameof(password), GetString($"Password must be at least {minLength} characters."));
 			}
 			Password = BCryptNext::BCrypt.Net.BCrypt.HashPassword(password.Trim(), workFactor);
 		}

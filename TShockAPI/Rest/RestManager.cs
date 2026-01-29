@@ -1216,7 +1216,7 @@ namespace TShockAPI
 					sb.AppendLine("{0}".SFormat(descattr.Description));
 
 					var permission = method.GetCustomAttributes(false).Where(o => o is Permission);
-					if (permission.Count() > 0)
+					if (permission.Any())
 					{
 						sb.AppendLine(GetString("* **Permissions**: `{0}`", String.Join(", ", permission.Select(p => ((Permission)p).Name))));
 					}
@@ -1225,8 +1225,8 @@ namespace TShockAPI
 						sb.AppendLine(GetString("No special permissions are required for this route."));
 					}
 					sb.AppendLine();
-					var verbs = method.GetCustomAttributes(false).Where(o => o is Verb);
-					if (verbs.Count() > 0)
+					var verbs = method.GetCustomAttributes(false).Where(o => o is Verb).Cast<Verb>();
+					if (verbs.Any())
 					{
 						sb.AppendLine(GetString("**Verbs**:"));
 						foreach (Verb verb in verbs)
@@ -1238,8 +1238,8 @@ namespace TShockAPI
 						}
 					}
 					sb.AppendLine();
-					var nouns = method.GetCustomAttributes(false).Where(o => o is Noun);
-					if (nouns.Count() > 0)
+					var nouns = method.GetCustomAttributes(false).Where(o => o is Noun).Cast<Noun>();
+					if (nouns.Any())
 					{
 						sb.AppendLine(GetString("**Nouns**:"));
 						foreach (Noun noun in nouns)
@@ -1375,7 +1375,7 @@ namespace TShockAPI
 			}
 			foreach (EscapedParameter filter in parameters)
 			{
-				if (player.ContainsKey(filter.Name) && !player[filter.Name].Equals(filter.Value))
+				if (player.TryGetValue(filter.Name, out object value) && !value.Equals(filter.Value))
 					return null;
 			}
 			return player;

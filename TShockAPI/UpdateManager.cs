@@ -134,7 +134,7 @@ namespace TShockAPI
 
 		private void NotifyAdministrators(Dictionary<string, string> update)
 		{
-			var changes = update["changes"].Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			var changes = update["changes"].Split('\n', StringSplitOptions.RemoveEmptyEntries);
 			NotifyAdministrator(TSPlayer.Server, changes);
 			foreach (TSPlayer player in TShock.Players)
 			{

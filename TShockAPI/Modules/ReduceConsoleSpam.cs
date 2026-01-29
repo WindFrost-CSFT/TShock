@@ -85,7 +85,7 @@ public class ReduceConsoleSpam : Module
 			{
 				var mprogress = e.Value.Substring(0, master + 1/*%*/);
 				var sprogress = e.Value.Substring(sub + FindSub.Length);
-				if (mprogress.EndsWith("%") && sprogress.EndsWith("%"))
+				if (mprogress.EndsWith('%') && sprogress.EndsWith('%'))
 				{
 					var text = e.Value.Substring(master + FindMaster.Length, sub - master - FindMaster.Length).Trim();
 

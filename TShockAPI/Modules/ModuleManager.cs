@@ -75,7 +75,7 @@ namespace TShockAPI.Modules
 					}
 				}
 
-				if (args.Count() == ctorParams.Length)
+				if (args.Count == ctorParams.Length)
 					constructor = ctor;
 			}
 

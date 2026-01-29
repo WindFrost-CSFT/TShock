@@ -767,7 +767,7 @@ namespace TShockAPI
 						return;
 					}
 				}
-				else if (action == EditAction.PlaceTile && (projectileCreatesTile.ContainsKey(lastKilledProj) && editData == projectileCreatesTile[lastKilledProj]))
+				else if (action == EditAction.PlaceTile && projectileCreatesTile.TryGetValue(lastKilledProj, out int value) && editData == value)
 				{
 					args.Player.LastKilledProjectile = 0;
 				}

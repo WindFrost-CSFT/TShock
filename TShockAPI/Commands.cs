@@ -113,8 +113,7 @@ namespace TShockAPI
 			get { return commandDelegate; }
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException();
+				ArgumentNullException.ThrowIfNull(value);
 
 				commandDelegate = value;
 			}
@@ -134,10 +133,9 @@ namespace TShockAPI
 
 		public Command(CommandDelegate cmd, params string[] names)
 		{
-			if (cmd == null)
-				throw new ArgumentNullException("cmd");
+			ArgumentNullException.ThrowIfNull(cmd);
 			if (names == null || names.Length < 1)
-				throw new ArgumentException("names");
+				throw new ArgumentException("is null or empty", nameof(names));
 
 			AllowServer = true;
 			CommandDelegate = cmd;
@@ -691,11 +689,10 @@ namespace TShockAPI
 			if (Hooks.PlayerHooks.OnPlayerCommand(player, cmdName, cmdText, args, ref cmds, cmdPrefix))
 				return true;
 
-			if (cmds.Count() == 0)
+			if (!cmds.Any())
 			{
-				if (player.AwaitingResponse.ContainsKey(cmdName))
+				if (player.AwaitingResponse.TryGetValue(cmdName, out Action<object> call))
 				{
-					Action<CommandArgs> call = player.AwaitingResponse[cmdName];
 					player.AwaitingResponse.Remove(cmdName);
 					call(new CommandArgs(cmdText, player, args));
 					return true;
@@ -2035,7 +2032,7 @@ namespace TShockAPI
 				return;
 			}
 
-			string replacementCommand = String.Join(" ", args.Parameters.Select(p => p.Contains(" ") ? $"\"{p}\"" : p));
+			string replacementCommand = string.Join(" ", args.Parameters.Select(p => p.Contains(' ') ? $"\"{p}\"" : p));
 			args.Player.tempGroup = new SuperAdminGroup();
 			HandleCommand(args.Player, replacementCommand);
 			args.Player.tempGroup = null;
@@ -2111,8 +2108,8 @@ namespace TShockAPI
 						Dictionary<string, int> restUsersTokens = new Dictionary<string, int>();
 						foreach (Rests.SecureRest.TokenData tokenData in TShock.RestApi.Tokens.Values)
 						{
-							if (restUsersTokens.ContainsKey(tokenData.Username))
-								restUsersTokens[tokenData.Username]++;
+							if (restUsersTokens.TryGetValue(tokenData.Username, out int value))
+								restUsersTokens[tokenData.Username] = ++value;
 							else
 								restUsersTokens.Add(tokenData.Username, 1);
 						}
@@ -2464,7 +2461,7 @@ namespace TShockAPI
 		private static void Rain(CommandArgs args)
 		{
 			bool slime = false;
-			if (args.Parameters.Count > 1 && args.Parameters[1].ToLowerInvariant() == "slime")
+			if (args.Parameters.Count > 1 && args.Parameters[1].Equals("slime", StringComparison.InvariantCultureIgnoreCase))
 			{
 				slime = true;
 			}
@@ -3149,7 +3146,7 @@ namespace TShockAPI
 					matches = new List<NPC> { npc };
 					break;
 				}
-				if (npc.FullName.ToLowerInvariant().StartsWith(npcStr.ToLowerInvariant()) ||
+				if (npc.FullName.StartsWith(npcStr, StringComparison.InvariantCultureIgnoreCase) ||
 					englishName?.StartsWith(npcStr, StringComparison.InvariantCultureIgnoreCase) == true)
 					matches.Add(npc);
 			}
@@ -3264,7 +3261,7 @@ namespace TShockAPI
 					});
 				#endregion
 			}
-			else if (args.Parameters[0].ToLower() == "add" && hasManageWarpPermission)
+			else if (args.Parameters[0].Equals("add", StringComparison.OrdinalIgnoreCase) && hasManageWarpPermission)
 			{
 				#region Add warp
 				if (args.Parameters.Count == 2)
@@ -3287,7 +3284,7 @@ namespace TShockAPI
 					args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax: {0}warp add [name].", Specifier));
 				#endregion
 			}
-			else if (args.Parameters[0].ToLower() == "del" && hasManageWarpPermission)
+			else if (args.Parameters[0].Equals("del", StringComparison.OrdinalIgnoreCase) && hasManageWarpPermission)
 			{
 				#region Del warp
 				if (args.Parameters.Count == 2)
@@ -3304,7 +3301,7 @@ namespace TShockAPI
 					args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax: {0}warp del [name].", Specifier));
 				#endregion
 			}
-			else if (args.Parameters[0].ToLower() == "hide" && hasManageWarpPermission)
+			else if (args.Parameters[0].Equals("hide", StringComparison.OrdinalIgnoreCase) && hasManageWarpPermission)
 			{
 				#region Hide warp
 				if (args.Parameters.Count == 3)
@@ -3330,7 +3327,7 @@ namespace TShockAPI
 					args.Player.SendErrorMessage(GetString("Invalid syntax. Proper syntax: {0}warp hide [name] <true/false>.", Specifier));
 				#endregion
 			}
-			else if (args.Parameters[0].ToLower() == "send" && args.Player.HasPermission(Permissions.tpothers))
+			else if (args.Parameters[0].Equals("send", StringComparison.OrdinalIgnoreCase) && args.Player.HasPermission(Permissions.tpothers))
 			{
 				#region Warp send
 				if (args.Parameters.Count < 3)
@@ -4749,14 +4746,14 @@ namespace TShockAPI
 						if (args.Parameters.Count == 3)
 						{
 							string regionName = args.Parameters[1];
-							if (args.Parameters[2].ToLower() == "true")
+							if (args.Parameters[2].Equals("true", StringComparison.OrdinalIgnoreCase))
 							{
 								if (TShock.Regions.SetRegionState(regionName, true))
 									args.Player.SendInfoMessage(GetString("Marked region {0} as protected.", regionName));
 								else
 									args.Player.SendErrorMessage(GetString($"Could not find the region {regionName}."));
 							}
-							else if (args.Parameters[2].ToLower() == "false")
+							else if (args.Parameters[2].Equals("false", StringComparison.OrdinalIgnoreCase))
 							{
 								if (TShock.Regions.SetRegionState(regionName, false))
 									args.Player.SendInfoMessage(GetString("Marked region {0} as unprotected.", regionName));

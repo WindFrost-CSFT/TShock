@@ -63,8 +63,7 @@ namespace Rests
 		{
 			get
 			{
-				object ret;
-				if (TryGetValue(key, out ret))
+				if (TryGetValue(key, out object ret))
 					return ret;
 				return null;
 			}

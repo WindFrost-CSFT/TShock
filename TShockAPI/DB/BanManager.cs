@@ -347,9 +347,9 @@ namespace TShockAPI.DB
 		/// <returns></returns>
 		public Ban GetBanById(int id)
 		{
-			if (Bans.ContainsKey(id))
+			if (Bans.TryGetValue(id, out Ban value))
 			{
-				return Bans[id];
+				return value;
 			}
 
 			using var reader = database.QueryReader("SELECT * FROM PlayerBans WHERE TicketNumber=@0", id);

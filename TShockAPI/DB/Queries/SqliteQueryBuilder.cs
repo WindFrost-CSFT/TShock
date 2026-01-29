@@ -48,7 +48,7 @@ public class SqliteQueryBuilder : GenericQueryBuilder, IQueryBuilder
 		var uniques = table.Columns.Where(c => c.Unique).Select(c => c.Name);
 		return "CREATE TABLE {0} ({1} {2})".SFormat(EscapeTableName(table.Name),
 			string.Join(", ", columns),
-			uniques.Count() > 0 ? ", UNIQUE({0})".SFormat(string.Join(", ", uniques)) : "");
+			uniques.Any() ? ", UNIQUE({0})".SFormat(string.Join(", ", uniques)) : "");
 	}
 
 	/// <summary>
@@ -91,7 +91,7 @@ public class SqliteQueryBuilder : GenericQueryBuilder, IQueryBuilder
 			return ret;
 		}
 
-		throw new NotImplementedException(Enum.GetName(typeof(MySqlDbType), type));
+		throw new NotImplementedException(Enum.GetName(type));
 	}
 
 	/// <summary>

@@ -542,7 +542,7 @@ namespace TShockAPI
 
 				sb.AppendLine($"## {name}");
 				sb.AppendLine($"{desc}");
-				sb.AppendLine(GetString("* **Commands**: `{0}`", strs.Count() > 0 ? string.Join(", ", strs) : GetString("No associated commands.")));
+				sb.AppendLine(GetString("* **Commands**: `{0}`", strs.Any() ? string.Join(", ", strs) : GetString("No associated commands.")));
 				sb.AppendLine();
 			}
 

@@ -305,7 +305,7 @@ namespace TShockAPI
 			player.sscDeathsPVP = this.deathsPVP;
 
 			if (extraSlot != null)
-				player.TPlayer.extraAccessory = extraSlot.Value == 1 ? true : false;
+				player.TPlayer.extraAccessory = extraSlot.Value == 1;
 			if (this.skinVariant != null)
 				player.TPlayer.skinVariant = this.skinVariant.Value;
 			if (this.voiceVariant != null)
@@ -603,11 +603,7 @@ namespace TShockAPI
 				var sacrificedItems = TShock.ResearchDatastore.GetSacrificedItems();
 				for(int i = 0; i < ItemID.Count; i++)
 				{
-					var amount = 0;
-					if (sacrificedItems.ContainsKey(i))
-					{
-						amount = sacrificedItems[i];
-					}
+					sacrificedItems.TryGetValue(i, out int amount);
 
 					var response = NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index,i, amount);
 					NetManager.Instance.SendToClient(response, player.Index);
