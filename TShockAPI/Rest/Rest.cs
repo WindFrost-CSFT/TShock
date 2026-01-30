@@ -398,7 +398,7 @@ namespace Rests
 						for (int i = 0; i < com.UriVerbs.Length; i++)
 							verbs.Add(com.UriVerbs[i], match.Groups[i + 1].Value);
 					}
-					else if (string.Equals(com.UriTemplate, uri, StringComparison.OrdinalIgnoreCase))
+					else if (!string.Equals(com.UriTemplate, uri, StringComparison.OrdinalIgnoreCase))
 					{
 						continue;
 					}
