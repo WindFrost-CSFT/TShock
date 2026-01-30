@@ -2978,35 +2978,39 @@ namespace TShockAPI
 		// Moved to Projectile.StatusNPC(int i).
 		private static Dictionary<int, short> NPCAddBuffTimeMax = new Dictionary<int, short>()
 		{
-			{ BuffID.Venom, 660 },                     // BuffID: 70
-			{ BuffID.CursedInferno, 420 },             // BuffID: 39
-			{ BuffID.OnFire, 600 },                    // BuffID: 24
-			{ BuffID.Ichor, 1200 },                    // BuffID: 69
-			{ BuffID.Confused, 240 },                  // BuffID: 31
-			{ BuffID.Poisoned, 1800 },                 // BuffID: 20
-			{ BuffID.Midas, 120 },                     // BuffID: 72
-			{ BuffID.OnFire3, 1200 },                  // BuffID: 323
-			{ BuffID.Frostburn2, 960 },                // BuffID: 324
-			{ BuffID.Bleeding, 420 },                  // BuffID: 30
-			{ BuffID.Stinky, 300 },                    // BuffID: 120
-			{ BuffID.Slimed, 180 },                    // BuffID: 137
-			{ BuffID.Hemorrhage, 780 },                // BuffID: 375
-			{ BuffID.BrokenArmor, 1260 },              // BuffID: 36
-			{ BuffID.BoneJavelin, 900 },               // BuffID: 169
-			{ BuffID.Daybreak, 300 },                  // BuffID: 189
-			{ BuffID.TentacleSpike, 540 },             // BuffID: 337
-			{ BuffID.BloodButcherer, 540 },            // BuffID: 344
-			{ BuffID.BetsysCurse, 600 },               // BuffID: 203
-			{ BuffID.StardustMinionBleed, 900 },       // BuffID: 183
-			{ BuffID.ShadowFlame, 480 },               // BuffID: 153
-			{ BuffID.SoulDrain, 30 },                  // BuffID: 151
-			{ BuffID.Oiled, 540 },                     // BuffID: 204
-			{ BuffID.Frostburn, 180 },                 // BuffID: 44
-			{ BuffID.EelWhipNPCDebuff, 240 },          // BuffID: 362
-			{ BuffID.ScytheWhipEnemyDebuff, 240 },     // BuffID: 310
-			{ BuffID.DryadsWardDebuff, 120 },          // BuffID: 186
-			{ BuffID.Wet, 60 },                        // BuffID: 103
-			{ BuffID.DryadsWard, 120 },                // BuffID: 165
+			{ BuffID.Shimmer, 100 },
+			{ BuffID.Venom, 1800 },
+			{ BuffID.CursedInferno, 600 },
+			{ BuffID.OnFire, 600 },
+			{ BuffID.Ichor, 1200 },
+			{ BuffID.Confused, 16684 },
+			{ BuffID.Poisoned, 3600 },
+			{ BuffID.Midas, 120 },
+			{ BuffID.Bleeding, 780 },
+			{ BuffID.Frostburn2, 1200 },
+			{ BuffID.OnFire3, 1200 },
+			{ BuffID.Stinky, 1800 },
+			{ BuffID.Slimed, 180 },
+			{ BuffID.Hemorrhage, 780 },
+			{ BuffID.BrokenArmor, 1260 },
+			{ BuffID.BoneJavelin, 900 },
+			{ BuffID.Daybreak, 300 },
+			{ BuffID.TentacleSpike, 540 },
+			{ BuffID.BloodButcherer, 540 },
+			{ BuffID.BetsysCurse, 600 },
+			{ BuffID.StardustMinionBleed, 900 },
+			{ BuffID.ShadowFlame, 660 },
+			{ BuffID.Frostburn, 240 },
+			{ BuffID.Oiled, 540 },
+			{ BuffID.SoulDrain, 30 },
+			{ BuffID.EelWhipNPCDebuff, 240 },
+			{ BuffID.ScytheWhipEnemyDebuff, 240 },
+			{ BuffID.Wet, 1500 },
+			{ BuffID.DryadsWard, 120 },
+			{ BuffID.DryadsWardDebuff, 120 },
+			{ BuffID.Tipsy, 3659 },
+			{ BuffID.Lovestruck, 1800 },
+			{ BuffID.GelBalloonBuff, 1800 },
 		};
 
 		/// <summary>
