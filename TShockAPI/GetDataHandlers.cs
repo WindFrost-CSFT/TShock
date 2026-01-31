@@ -2762,20 +2762,19 @@ namespace TShockAPI
 			int respawnTimer = args.Data.ReadInt32();
 			short numberOfDeathsPVE = args.Data.ReadInt16();
 			short numberOfDeathsPVP = args.Data.ReadInt16();
-			var  team = args.Data.ReadByte();
+			var team = args.Data.ReadByte();
 			PlayerSpawnContext context = (PlayerSpawnContext)args.Data.ReadByte();
 
 			if (args.Player.State >= (int)ConnectionState.RequestingWorldData && !args.Player.FinishedHandshake)
 				args.Player.FinishedHandshake = true; //If the player has requested world data before sending spawn player, they should be at the obvious ClientRequestedWorldData state. Also only set this once to remove redundant updates.
 
-			if (OnPlayerSpawn(args.Player, args.Data, player, spawnX, spawnY, respawnTimer,numberOfDeathsPVE, numberOfDeathsPVP,team,  context))
+			if (OnPlayerSpawn(args.Player, args.Data, player, spawnX, spawnY, respawnTimer,numberOfDeathsPVE, numberOfDeathsPVP, team,  context))
 				return true;
 
 			if (!Main.ServerSideCharacter || context != PlayerSpawnContext.SpawningIntoWorld)
 			{
 				args.Player.Dead = respawnTimer > 0;
 			}
-
 			if (Main.ServerSideCharacter)
 			{
 				// As long as the player has not changed his spawnpoint since initial connection,
