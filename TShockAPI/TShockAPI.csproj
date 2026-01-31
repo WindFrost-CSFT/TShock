@@ -40,25 +40,11 @@
     <PackageReference Include="MySql.Data" Version="9.1.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
+      <PackageReference Include="OTAPI.Upcoming" Version="3.3.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TerrariaServerAPI\TerrariaServerAPI\TerrariaServerAPI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="HttpServer">
-      <HintPath>..\prebuilts\HttpServer.dll</HintPath>
-    </Reference>
-    <Reference Include="ModFramework">
-      <HintPath>..\lib\ModFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="OTAPI">
-      <HintPath>..\lib\OTAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="OTAPI.Runtime">
-      <HintPath>..\lib\OTAPI.Runtime.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
