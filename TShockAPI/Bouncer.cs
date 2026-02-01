@@ -810,6 +810,14 @@ namespace TShockAPI
 						return;
 					}
 
+					// Handle placement action if the player is using a Staff of Regrowth but not placing a herb.
+					if (selectedItem.type is ItemID.AcornAxe or ItemID.StaffofRegrowth && editData != TileID.ImmatureHerbs)
+					{
+						TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from using ice {3} but not placing herb {0} {1} {2}", args.Player.Name, action, editData, selectedItem.Name));
+						args.Player.SendTileSquareCentered(tileX, tileY, 4);
+						args.Handled = true;
+					}
+
 					// Handle placement action if the player is using an Ice Rod but not placing the iceblock.
 					if (selectedItem.type == ItemID.IceRod && editData != TileID.MagicalIceBlock)
 					{
@@ -821,7 +829,7 @@ namespace TShockAPI
 					if ((action == EditAction.PlaceTile || action == EditAction.ReplaceTile) && editData != selectedItem.createTile)
 					{
 						// These would get caught up in the below check because Terraria does not set their createTile field.
-						if (selectedItem.type != ItemID.IceRod && selectedItem.type != ItemID.DirtBomb && selectedItem.type != ItemID.StickyBomb && (args.Player.TPlayer.mount.Type != MountID.DiggingMoleMinecart || editData != TileID.MinecartTrack))
+						if (selectedItem.type != ItemID.IceRod && selectedItem.type != ItemID.DirtBomb && selectedItem.type != ItemID.StickyBomb && (args.Player.TPlayer.mount.Type != MountID.DiggingMoleMinecart || editData != TileID.MinecartTrack) && selectedItem.type != ItemID.AcornAxe && selectedItem.type != ItemID.StaffofRegrowth)
 						{
 							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from tile placement not matching selected item createTile {0} {1} {2} selectedItemID:{3} createTile:{4}", args.Player.Name, action, editData, selectedItem.type, selectedItem.createTile));
 							args.Player.SendTileSquareCentered(tileX, tileY, 4);
@@ -1018,6 +1026,10 @@ namespace TShockAPI
 					}
 				}
 				args.Handled = false;
+
+				Terraria.WorldGen.SecretSeed.Enable(WorldGen.SecretSeed.AllSecretSeeds[0]);
+
+
 				return;
 			}
 			catch
