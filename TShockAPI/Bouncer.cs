@@ -810,12 +810,22 @@ namespace TShockAPI
 						return;
 					}
 
-					// Handle placement action if the player is using a Staff of Regrowth but not placing a herb.
-					if (selectedItem.type is ItemID.AcornAxe or ItemID.StaffofRegrowth && editData != TileID.ImmatureHerbs)
-					{
-						TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from using ice {3} but not placing herb {0} {1} {2}", args.Player.Name, action, editData, selectedItem.Name));
-						args.Player.SendTileSquareCentered(tileX, tileY, 4);
-						args.Handled = true;
+					// Handle placement action for Regrowth tools to ensure they only replant herbs on valid containers.
+					if (selectedItem.type is ItemID.AcornAxe or ItemID.StaffofRegrowth) {
+						if (editData != TileID.ImmatureHerbs)
+						{
+							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected {0} from placing non-herb tile {1} using {2}", args.Player.Name, editData, selectedItem.Name));
+							args.Player.SendTileSquareCentered(tileX, tileY, 4);
+							args.Handled = true;
+						}
+
+						var containerTile = Main.tile[tileX, tileY + 1];
+						if (!containerTile.active() || containerTile.type is not (TileID.ClayPot or TileID.RockGolemHead or TileID.PlanterBox))
+						{
+							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected {0} from planting herb on invalid tile {1} using {2}", args.Player.Name, containerTile.type, selectedItem.Name));
+							args.Player.SendTileSquareCentered(tileX, tileY, 4);
+							args.Handled = true;
+						}
 					}
 
 					// Handle placement action if the player is using an Ice Rod but not placing the iceblock.
