@@ -1193,7 +1193,7 @@ namespace TShockAPI
 				return;
 			}
 
-			if (!args.Player.IsInRange((int)(pos.X / 16f), (int)(pos.Y / 16f)))
+			if (!args.Player.IsInRange((int)(pos.X / 16f), (int)(pos.Y / 16f), 64))
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from range check from {0}", args.Player.Name));
 				args.Player.SendData(PacketTypes.ItemDrop, "", id);
