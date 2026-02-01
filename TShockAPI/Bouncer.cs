@@ -611,6 +611,7 @@ namespace TShockAPI
 			EditType type = args.editDetail;
 			ITile tile = Main.tile[tileX, tileY];
 
+
 			// 'placeStyle' is a term used in Terraria land to determine which frame of a sprite is displayed when the sprite is placed. The placeStyle
 			// determines the frameX and frameY offsets
 			byte requestedPlaceStyle = args.Style;
@@ -811,7 +812,16 @@ namespace TShockAPI
 					}
 
 					// Handle placement action for Regrowth tools to ensure they only replant herbs on valid containers.
-					if (selectedItem.type is ItemID.AcornAxe or ItemID.StaffofRegrowth) {
+					if (selectedItem.type is ItemID.AcornAxe or ItemID.StaffofRegrowth)
+					{
+						if ((int)editData is TileID.Grass or TileID.HallowedGrass or TileID.CorruptGrass
+						    or TileID.CrimsonGrass or TileID.JungleGrass or TileID.MushroomGrass
+						    or TileID.CorruptJungleGrass or TileID.CrimsonJungleGrass or TileID.AshGrass
+						    || TileID.Sets.Conversion.Moss[editData])
+						{
+							return;
+						}
+
 						if (editData != TileID.ImmatureHerbs)
 						{
 							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected {0} from placing non-herb tile {1} using {2}", args.Player.Name, editData, selectedItem.Name));

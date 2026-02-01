@@ -155,7 +155,9 @@ namespace TShockAPI
 					{ PacketTypes.FishOutNPC, HandleFishOutNPC },
 					{ PacketTypes.FoodPlatterTryPlacing, HandleFoodPlatterTryPlacing },
 					{ PacketTypes.SyncCavernMonsterType, HandleSyncCavernMonsterType },
-					{ PacketTypes.SyncLoadout, HandleSyncLoadout }
+					{ PacketTypes.SyncLoadout, HandleSyncLoadout },
+					{ PacketTypes.SyncItemCannotBeTakenByEnemies, HandleItemDrop },
+					{ PacketTypes.SyncItemsWithShimmer, HandleItemDrop }
 				};
 		}
 		[Conditional("FALSE")]
