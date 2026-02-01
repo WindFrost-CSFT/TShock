@@ -29,6 +29,7 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 using TShockAPI.Models.PlayerUpdate;
 using System.Threading.Tasks;
+using NuGet.Protocol.Plugins;
 using OTAPI;
 using Terraria.GameContent.Tile_Entities;
 
@@ -1171,32 +1172,32 @@ namespace TShockAPI
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from prefix check from {0}", args.Player.Name));
 
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 			}
 
 			//Item removed, let client do this to prevent item duplication
 			// client side (but only if it passed the range check) (i.e., return false)
-			if (type == 0)
-			{
-				if (!args.Player.IsInRange((int)(Main.item[id].position.X / 16f), (int)(Main.item[id].position.Y / 16f)))
-				{
-					// Causes item duplications. Will be re added if necessary
-					//args.Player.SendData(PacketTypes.ItemDrop, "", id);
-					TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from dupe range check from {0}", args.Player.Name));
-					args.Handled = true;
-					return;
-				}
+			// if (type == 0)
+			// {
+			// 	if (!args.Player.IsInRange((int)(Main.item[id].position.X / 16f), (int)(Main.item[id].position.Y / 16f)))
+			// 	{
+			// 		// Causes item duplications. Will be re added if necessary
+			// 		//args.Player.SendData(PacketTypes.ItemDrop, "", id);
+			// 		TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from dupe range check from {0}", args.Player.Name));
+			// 		args.Handled = true;
+			// 		return;
+			// 	}
+			//
+			// 	args.Handled = false;
+			// 	return;
+			// }
 
-				args.Handled = false;
-				return;
-			}
-
-			if (!args.Player.IsInRange((int)(pos.X / 16f), (int)(pos.Y / 16f), 64))
+			if (!args.Player.IsInRange((int)(pos.X / 16f), (int)(pos.Y / 16f), 128))
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from range check from {0}", args.Player.Name));
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 			}
@@ -1206,7 +1207,7 @@ namespace TShockAPI
 			if (Main.item[id].active && Main.item[id].type != type)
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from item drop/pickup check from {0}", args.Player.Name));
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 			}
@@ -1216,7 +1217,7 @@ namespace TShockAPI
 			if ((stacks > item.maxStack || stacks <= 0) || (TShock.ItemBans.DataModel.ItemIsBanned(EnglishLanguage.GetItemNameById(item.type), args.Player) && !args.Player.HasPermission(Permissions.allowdroppingbanneditems)))
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from drop item ban check / max stack check / min stack check from {0}", args.Player.Name));
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 			}
@@ -1227,7 +1228,7 @@ namespace TShockAPI
 				//Player is probably trying to sneak items onto the server in their hands!!!
 				TShock.Log.ConsoleInfo(GetString("Player {0} tried to sneak {1} onto the server!", args.Player.Name, item.Name));
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from sneaky from {0}", args.Player.Name));
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 
@@ -1236,7 +1237,7 @@ namespace TShockAPI
 			if (args.Player.IsBeingDisabled())
 			{
 				TShock.Log.ConsoleDebug(GetString("Bouncer / OnItemDrop rejected from disabled from {0}", args.Player.Name));
-				args.Player.SendData(PacketTypes.ItemDrop, "", id);
+				args.Player.SendData(PacketTypes.SyncItemPickup, "", id);
 				args.Handled = true;
 				return;
 			}
