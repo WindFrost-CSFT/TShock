@@ -203,6 +203,15 @@ namespace TShockAPI
 			/// The Terraria playerID of the player
 			/// </summary>
 			public byte PlayerId { get; set; }
+
+			/// <summary>
+			/// Voice variant
+			/// </summary>
+			public byte VoiceVariant { get; set; }
+			/// <summary>
+			/// Voice pitch offset
+			/// </summary>
+			public float VoicePitchOffset { get; set; }
 			/// <summary>
 			/// Hair color
 			/// </summary>
@@ -225,7 +234,8 @@ namespace TShockAPI
 		/// If this is cancelled, the server will kick the player. If this should be changed in the future, let someone know.
 		/// </summary>
 		public static HandlerList<PlayerInfoEventArgs> PlayerInfo = new HandlerList<PlayerInfoEventArgs>();
-		private static bool OnPlayerInfo(TSPlayer player, MemoryStream data, byte _plrid, byte _hair, int _style, byte _difficulty, string _name)
+		private static bool OnPlayerInfo(TSPlayer player, MemoryStream data, byte _plrid, byte _voiceVariant, float _voicePitchOffset,
+				byte _hair, int _style, byte _difficulty, string _name)
 		{
 			if (PlayerInfo == null)
 				return false;
@@ -238,6 +248,8 @@ namespace TShockAPI
 				Hair = _hair,
 				Style = _style,
 				Difficulty = _difficulty,
+				VoiceVariant = _voiceVariant,
+				VoicePitchOffset = _voicePitchOffset,
 				Name = _name,
 			};
 			PlayerInfo.Invoke(null, args);
@@ -301,10 +313,12 @@ namespace TShockAPI
 
 			/// <summary>The Y position requested. Or -1 for spawn.</summary>
 			public int Y { get; set; }
+			/// <summary>The team of the requesting player.</summary>
+			public byte Team { get; set; }
 		}
 		/// <summary>The hook for a GetSection event.</summary>
 		public static HandlerList<GetSectionEventArgs> GetSection = new HandlerList<GetSectionEventArgs>();
-		private static bool OnGetSection(TSPlayer player, MemoryStream data, int x, int y)
+		private static bool OnGetSection(TSPlayer player, MemoryStream data, int x, int y, byte team)
 		{
 			if (GetSection == null)
 				return false;
@@ -315,12 +329,12 @@ namespace TShockAPI
 				Data = data,
 				X = x,
 				Y = y,
+				Team = team,
 			};
 
 			GetSection.Invoke(null, args);
 			return args.Handled;
 		}
-
 		/// <summary>
 		/// For use in a PlayerUpdate event
 		/// </summary>
@@ -358,7 +372,6 @@ namespace TShockAPI
 			/// Velocity of the player.
 			/// </summary>
 			public Vector2 Velocity { get; set; }
-			public ushort? MountType { get; set; }
 			/// <summary>
 			/// Original position of the player when using Potion of Return.
 			/// </summary>
@@ -367,7 +380,6 @@ namespace TShockAPI
 			/// Home Position of the player for Potion of Return.
 			/// </summary>
 			public Vector2? HomePos { get; set; }
-			public Vector2? NetCameraTarget { get; set; }
 
 		}
 		/// <summary>
@@ -385,10 +397,8 @@ namespace TShockAPI
 			byte selectedItem,
 			Vector2 position,
 			Vector2 velocity,
-			ushort? mountType,
 			Vector2? originalPos,
-			Vector2? homePos,
-			Vector2? netCameraTarget)
+			Vector2? homePos)
 		{
 			if (PlayerUpdate == null)
 				return false;
@@ -405,10 +415,8 @@ namespace TShockAPI
 				SelectedItem = selectedItem,
 				Position = position,
 				Velocity = velocity,
-				MountType = mountType,
 				OriginalPos = originalPos,
-				HomePos = homePos,
-				NetCameraTarget = netCameraTarget
+				HomePos = homePos
 			};
 			PlayerUpdate.Invoke(null, args);
 			return args.Handled;
@@ -1078,12 +1086,18 @@ namespace TShockAPI
 			/// 0 = The Aether
 			/// </summary>
 			public BitsByte Zone5 { get; set; }
+
+			/// <summary>
+			/// The number of nearby town NPCs.
+			/// </summary>
+			public byte TownNPCs { get; set; }
 		}
 		/// <summary>
 		/// PlayerZone - When the player sends it's zone/biome information to the server
 		/// </summary>
 		public static HandlerList<PlayerZoneEventArgs> PlayerZone = new HandlerList<PlayerZoneEventArgs>();
-		private static bool OnPlayerZone(TSPlayer player, MemoryStream data, byte plr, BitsByte zone1, BitsByte zone2, BitsByte zone3, BitsByte zone4, BitsByte zone5)
+		private static bool OnPlayerZone(TSPlayer player, MemoryStream data, byte plr, BitsByte zone1, BitsByte zone2,
+				BitsByte zone3, BitsByte zone4, BitsByte zone5, byte townNPCs)
 		{
 			if (PlayerZone == null)
 				return false;
@@ -1097,7 +1111,8 @@ namespace TShockAPI
 				Zone2 = zone2,
 				Zone3 = zone3,
 				Zone4 = zone4,
-				Zone5 = zone5
+				Zone5 = zone5,
+				TownNPCs = townNPCs,
 			};
 			PlayerZone.Invoke(null, args);
 			return args.Handled;
@@ -2154,6 +2169,26 @@ namespace TShockAPI
 		}
 
 		/// <summary>
+		/// Represents the ID of an inventory inside a <see cref="TEDisplayDoll"/>.
+		/// </summary>
+		public enum DisplayDollInventoryID
+		{
+			/// <summary>
+			/// The ID of the inventory holding the equipment items.
+			/// </summary>
+			Equipment = 0,
+
+			/// <summary>
+			/// The ID of the inventory holding the dyes.
+			/// </summary>
+			Dyes = 1,
+
+			/// <summary>
+			/// The ID of the inventory holding the miscellaneous items (mounts, pets, etc.).
+			/// </summary>
+			Misc = 2,
+		}
+		/// <summary>
 		/// For use in a TileEntityDisplayDollItemSync event.
 		/// </summary>
 		public class DisplayDollItemSyncEventArgs : GetDataHandledEventArgs
@@ -2177,7 +2212,19 @@ namespace TShockAPI
 			/// <summary>
 			/// Whether or not the slot that is being modified is a Dye slot.
 			/// </summary>
-			public bool IsDye { get; set; }
+			[Obsolete($"Use {nameof(InventoryID)} instead.")]
+			public bool IsDye
+			{
+				get => InventoryID == DisplayDollInventoryID.Dyes;
+				set => InventoryID = value
+					? DisplayDollInventoryID.Dyes
+					: DisplayDollInventoryID.Equipment
+					;
+			}
+			/// <summary>
+			/// The ID of the inventory that is being modified.
+			/// </summary>
+			public DisplayDollInventoryID InventoryID { get; set; }
 			/// <summary>
 			/// The current item that is present in the slot before the modification.
 			/// </summary>
@@ -2187,11 +2234,35 @@ namespace TShockAPI
 			/// </summary>
 			public Item NewItem { get; set; }
 		}
+
+		/// <summary>
+		/// For use in a <see cref="DisplayDollPoseSync"/> event.
+		/// </summary>
+		public class DisplayDollPoseSyncEventArgs : GetDataHandledEventArgs
+		{
+			/// <summary>
+			/// The player index in the packet who modifies the DisplayDoll item slot.
+			/// </summary>
+			public byte PlayerIndex { get; set; }
+			/// <summary>
+			/// The ID of the TileEntity that is being modified.
+			/// </summary>
+			public int TileEntityID { get; set; }
+			/// <summary>
+			/// The TEDisplayDoll object that is being modified.
+			/// </summary>
+			public TEDisplayDoll DisplayDollEntity { get; set; }
+			/// <summary>
+			/// The incoming pose ID of the TEDisplayDoll.
+			/// </summary>
+			public byte Pose { get; set; }
+		}
+
 		/// <summary>
 		/// Called when a player modifies a DisplayDoll (Mannequin) item slot.
 		/// </summary>
 		public static HandlerList<DisplayDollItemSyncEventArgs> DisplayDollItemSync = new HandlerList<DisplayDollItemSyncEventArgs>();
-		private static bool OnDisplayDollItemSync(TSPlayer player, MemoryStream data, byte playerIndex, int tileEntityID, TEDisplayDoll displayDollEntity, int slot, bool isDye, Item oldItem, Item newItem)
+		private static bool OnDisplayDollItemSync(TSPlayer player, MemoryStream data, byte playerIndex, int tileEntityID, TEDisplayDoll displayDollEntity, int slot, DisplayDollInventoryID inventoryID, Item oldItem, Item newItem)
 		{
 			if (DisplayDollItemSync == null)
 				return false;
@@ -2204,13 +2275,36 @@ namespace TShockAPI
 				TileEntityID = tileEntityID,
 				DisplayDollEntity = displayDollEntity,
 				Slot = slot,
-				IsDye = isDye,
+				InventoryID = inventoryID,
 				OldItem = oldItem,
 				NewItem = newItem
 			};
 			DisplayDollItemSync.Invoke(null, args);
 			return args.Handled;
 		}
+
+		/// <summary>
+		/// Called when a player modifies a DisplayDoll (Mannequin) pose.
+		/// </summary>
+		public static HandlerList<DisplayDollPoseSyncEventArgs> DisplayDollPoseSync = new();
+		private static bool OnDisplayDollPoseSync(TSPlayer player, MemoryStream data, byte playerIndex, int tileEntityID, TEDisplayDoll displayDollEntity, byte pose)
+		{
+			if (DisplayDollPoseSync == null)
+				return false;
+
+			var args = new DisplayDollPoseSyncEventArgs
+			{
+				Player = player,
+				Data = data,
+				PlayerIndex = playerIndex,
+				TileEntityID = tileEntityID,
+				DisplayDollEntity = displayDollEntity,
+				Pose = pose,
+			};
+			DisplayDollPoseSync.Invoke(null, args);
+			return args.Handled;
+		}
+
 
 		/// <summary>
 		/// For use in an OnRequestTileEntityInteraction event.
@@ -2465,14 +2559,13 @@ namespace TShockAPI
 			byte playerid = args.Data.ReadInt8();
 			// 0-3 male; 4-7 female
 			int skinVariant = args.Data.ReadByte();
-			int voiceVariant = args.Data.ReadByte();
+			byte voiceVariant = args.Data.ReadInt8();
 			float voicePitchOffset = args.Data.ReadSingle();
 			var hair = args.Data.ReadInt8();
 			string name = args.Data.ReadString();
 			byte hairDye = args.Data.ReadInt8();
 
-			BitsByte hideVisual = args.Data.ReadInt8();
-			BitsByte hideVisual2 = args.Data.ReadInt8();
+			ushort hideVisualFlags = args.Data.ReadUInt16();
 			BitsByte hideMisc = args.Data.ReadInt8();
 
 			Color hairColor = new Color(args.Data.ReadInt8(), args.Data.ReadInt8(), args.Data.ReadInt8());
@@ -2513,7 +2606,7 @@ namespace TShockAPI
 			bool usedAmbrosia = bitsByte10[5];
 			bool ateArtisanBread = bitsByte10[6];
 
-			if (OnPlayerInfo(args.Player, args.Data, playerid, hair, skinVariant, difficulty, name))
+			if (OnPlayerInfo(args.Player, args.Data, playerid, voiceVariant, voicePitchOffset, hair, skinVariant, difficulty, name))
 			{
 				TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerInfo rejected plugin phase {0}", name));
 				args.Player.Kick(GetString("A plugin on this server stopped your login."), true, true);
@@ -2549,14 +2642,8 @@ namespace TShockAPI
 				args.Player.TPlayer.shirtColor = shirtColor;
 				args.Player.TPlayer.underShirtColor = underShirtColor;
 				args.Player.TPlayer.shoeColor = shoeColor;
-				//@Olink: If you need to change bool[10], please make sure you also update the for loops below to account for it.
-				//There are two arrays from terraria that we only have a single array for.  You will need to make sure that you are looking
-				//at the correct terraria array (hideVisual or hideVisual2).
-				args.Player.TPlayer.hideVisibleAccessory = new bool[10];
-				for (int i = 0; i < 8; i++)
-					args.Player.TPlayer.hideVisibleAccessory[i] = hideVisual[i];
-				for (int i = 0; i < 2; i++)
-					args.Player.TPlayer.hideVisibleAccessory[i + 8] = hideVisual2[i];
+				for (var i = 0; i < args.Player.TPlayer.hideVisibleAccessory.Length; i++)
+					args.Player.TPlayer.hideVisibleAccessory[i] = (hideVisualFlags & (1 << i)) != 0;
 				args.Player.TPlayer.hideMisc = hideMisc;
 				args.Player.TPlayer.extraAccessory = extraSlot;
 				args.Player.TPlayer.UsingBiomeTorches = usingBiomeTorches;
@@ -2732,7 +2819,11 @@ namespace TShockAPI
 
 		private static bool HandleGetSection(GetDataHandlerArgs args)
 		{
-			if (OnGetSection(args.Player, args.Data, args.Data.ReadInt32(), args.Data.ReadInt32()))
+			int x = args.Data.ReadInt32();
+			int y = args.Data.ReadInt32();
+			byte team = args.Data.ReadInt8();
+
+			if (OnGetSection(args.Player, args.Data, x, y, team))
 				return true;
 
 			if (TShock.Utils.GetActivePlayerCount() + 1 > TShock.Config.Settings.MaxSlots &&
@@ -2851,15 +2942,11 @@ namespace TShockAPI
 
 			Vector2 velocity = Vector2.Zero;
 			if (miscData1.HasVelocity)
-			{
 				velocity = args.Data.ReadVector2();
-			}
 
-			ushort? mountType = null;
-			if (miscData1.IsMountActive)
-			{
+			ushort mountType = 0;
+			if (miscData1.HasMount)
 				mountType = args.Data.ReadUInt16();
-			}
 
 			Vector2? originalPosition = new Vector2?();
 			Vector2? homePosition = Vector2.Zero;
@@ -2870,13 +2957,7 @@ namespace TShockAPI
 				TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerUpdate home position delta {0}", args.Player.Name));
 			}
 
-			Vector2? netCameraTarget = null;
-			if (miscData3.HasNetCameraTarget)
-			{
-				netCameraTarget = args.Data.ReadVector2();
-			}
-
-			if (OnPlayerUpdate(args.Player, args.Data, playerID, controls, miscData1, miscData2, miscData3, selectedItem, position, velocity, mountType, originalPosition, homePosition, netCameraTarget))
+			if (OnPlayerUpdate(args.Player, args.Data, playerID, controls, miscData1, miscData2, miscData3, selectedItem, position, velocity, originalPosition, homePosition))
 				return true;
 
 			return false;
@@ -3280,8 +3361,9 @@ namespace TShockAPI
 			BitsByte zone3 = args.Data.ReadInt8();
 			BitsByte zone4 = args.Data.ReadInt8();
 			BitsByte zone5 = args.Data.ReadInt8();
+			byte townNPCs = args.Data.ReadInt8();
 
-			if (OnPlayerZone(args.Player, args.Data, plr, zone1, zone2, zone3, zone4, zone5))
+			if (OnPlayerZone(args.Player, args.Data, plr, zone1, zone2, zone3, zone4, zone5, townNPCs))
 				return true;
 
 			return false;
@@ -3513,17 +3595,13 @@ namespace TShockAPI
 
 		private static bool HandlePlayerBuffList(GetDataHandlerArgs args)
 		{
-
-
-
-
 			var id = args.Data.ReadInt8();
 
 			if (OnPlayerBuffUpdate(args.Player, args.Data, id))
 				return true;
 			int  buff;
 			int buffIndex = 0;
-			while ((buff = args.Data.ReadUInt16()) > 0)
+			while ((buff = args.Data.ReadUInt16()) > 0 && buffIndex < Player.maxBuffs)
 			{
 
 				if (buff == 10 && TShock.Config.Settings.DisableInvisPvP && args.TPlayer.hostile)
@@ -3536,16 +3614,11 @@ namespace TShockAPI
 				}
 
 				args.TPlayer.buffType[buffIndex] = buff;
-				if (args.TPlayer.buffType[buffIndex] > 0)
-				{
-					args.TPlayer.buffTime[buffIndex] = 60;
-				}
-				else
-				{
-					args.TPlayer.buffTime[buffIndex] = 0;
-				}
-
+				args.TPlayer.buffTime[buffIndex] = 60;
 				buffIndex++;
+				// Clear remaining buff slots
+				Array.Clear(args.TPlayer.buffType, buffIndex, args.TPlayer.buffType.Length - buffIndex);
+				Array.Clear(args.TPlayer.buffTime, buffIndex, args.TPlayer.buffTime.Length - buffIndex);
 			}
 
 			TShock.Log.ConsoleDebug(GetString("GetDataHandlers / HandlePlayerBuffList handled event and sent data {0}", args.Player.Name));
@@ -4456,69 +4529,82 @@ namespace TShockAPI
 			byte playerIndex = args.Data.ReadInt8();
 			int tileEntityID = args.Data.ReadInt32();
 			int slot = args.Data.ReadByte();
-			bool isDye = false;
-			if (slot >= 8)
-			{
-				isDye = true;
-				slot -= 8;
-			}
+			int subtype = args.Data.ReadByte();
 
-			Item newItem = new Item();
-			Item oldItem = new Item();
-
-			if (!TileEntity.ByID.TryGetValue(tileEntityID, out TileEntity tileEntity))
+			if (!TileEntity.ByID.TryGetValue(tileEntityID, out TileEntity entity) || entity is not TEDisplayDoll displayDoll)
 				return false;
 
-			TEDisplayDoll displayDoll = tileEntity as TEDisplayDoll;
-			if (displayDoll != null)
+			switch (subtype)
 			{
-				//oldItem = displayDoll._items[slot];
-				if (isDye)
-					oldItem = displayDoll._dyes[slot];
+				case 0:
+					return HandleItemSync(DisplayDollInventoryID.Equipment, displayDoll._equip);
+				case 1:
+					return HandleItemSync(DisplayDollInventoryID.Dyes, displayDoll._dyes);
+				case 3:
+					return HandleItemSync(DisplayDollInventoryID.Misc, displayDoll._misc);
+
+				case 2:
+				{
+					byte pose = (byte)args.Data.ReadByte();
+					return OnDisplayDollPoseSync(args.Player, args.Data, playerIndex, tileEntityID, displayDoll, pose);
+				}
+
+				default:
+					return false;
+			}
+			bool HandleItemSync(DisplayDollInventoryID inventoryID, Item[] items)
+			{
+				Item oldItem = items[slot];
 
 				ushort itemType = args.Data.ReadUInt16();
 				ushort stack = args.Data.ReadUInt16();
 				int prefix = args.Data.ReadByte();
 
-				if (oldItem.type == 0 && newItem.type == 0)
+				if (oldItem.type == 0 && itemType == 0)
 					return false;
 
+				Item newItem = new Item();
 				newItem.SetDefaults(itemType);
 				newItem.stack = stack;
 				newItem.Prefix(prefix);
 
-				if (OnDisplayDollItemSync(args.Player, args.Data, playerIndex, tileEntityID, displayDoll, slot, isDye, oldItem, newItem))
+				if (OnDisplayDollItemSync(args.Player, args.Data, playerIndex, tileEntityID, displayDoll, slot, inventoryID, oldItem, newItem))
 					return true;
-			}
-			return false;
-		}
 
-		private static bool HandleRequestTileEntityInteraction(GetDataHandlerArgs args)
-		{
-			int tileEntityID = args.Data.ReadInt32();
-			byte playerIndex = args.Data.ReadInt8();
-
-			if (!TileEntity.ByID.TryGetValue(tileEntityID, out TileEntity tileEntity))
 				return false;
-
-			if (OnRequestTileEntityInteraction(args.Player, args.Data, tileEntity, playerIndex))
-				return true;
-
-			return false;
+			}
 		}
 
-		private static bool HandleSyncTilePicking(GetDataHandlerArgs args)
-		{
-			byte playerIndex = args.Data.ReadInt8();
-			short tileX = args.Data.ReadInt16();
-			short tileY = args.Data.ReadInt16();
-			byte damage = args.Data.ReadInt8();
 
-			if (OnSyncTilePicking(args.Player, args.Data, playerIndex, tileX, tileY, damage))
-				return true;
 
+
+	private static bool HandleRequestTileEntityInteraction(GetDataHandlerArgs args)
+	{
+		int tileEntityID = args.Data.ReadInt32();
+		byte playerIndex = args.Data.ReadInt8();
+
+		if (!TileEntity.ByID.TryGetValue(tileEntityID, out TileEntity tileEntity))
 			return false;
-		}
+
+		if (OnRequestTileEntityInteraction(args.Player, args.Data, tileEntity, playerIndex))
+			return true;
+
+		return false;
+	}
+
+	private static bool HandleSyncTilePicking(GetDataHandlerArgs args)
+	{
+		byte playerIndex = args.Data.ReadInt8();
+		short tileX = args.Data.ReadInt16();
+		short tileY = args.Data.ReadInt16();
+		byte damage = args.Data.ReadInt8();
+
+		if (OnSyncTilePicking(args.Player, args.Data, playerIndex, tileX, tileY, damage))
+			return true;
+
+		return false;
+	}
+
 
 		private static bool HandleSyncRevengeMarker(GetDataHandlerArgs args)
 		{

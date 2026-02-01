@@ -75,7 +75,10 @@ namespace TShockAPI.Models.PlayerUpdate
 			set => bitsbyte[6] = value;
 		}
 
-		public bool IsMountActive
+		/// <summary>
+		/// Gets or Sets the Has Mount flag on the backing field (1.4.5+)
+		/// </summary>
+		public bool HasMount
 		{
 			get => bitsbyte[7];
 			set => bitsbyte[7] = value;
