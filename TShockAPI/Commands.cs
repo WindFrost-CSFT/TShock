@@ -35,7 +35,9 @@ using Terraria.GameContent.Events;
 using Microsoft.Xna.Framework;
 using TShockAPI.Localization;
 using System.Text.RegularExpressions;
+using Terraria.Chat.Commands;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
 namespace TShockAPI
@@ -644,6 +646,10 @@ namespace TShockAPI
 			add(new Command(ShowAllPVPDeath, "allpvpdeath")
 			{
 				HelpText = GetString("Shows the number of PVP deaths for all online players."),
+			});
+			add(new Command(BossDamage, "bossdamage")
+			{
+				HelpText = GetString("Shows recent boss kill contribution."),
 			});
 
 			TShockCommands = new ReadOnlyCollection<Command>(tshockCommands);
@@ -5910,6 +5916,27 @@ namespace TShockAPI
 				.Select(x => GetString($"*{x.Name} was slain by other players {x.DeathsPVP} times."));
 
 			args.Player.SendErrorMessage(string.Join('\n',deathsRank));
+		}
+
+		private static void BossDamage(CommandArgs args)
+		{
+			var attempts = NPCDamageTracker.RecentAttempts().ToList();
+
+			if (attempts.Count == 0)
+			{
+				args.Player.SendWarningMessage(GetString("No recent boss kill data found."));
+				return;
+			}
+			foreach (var recentAttempt in attempts)
+			{
+				for (var playerId = 0; playerId < byte.MaxValue; ++playerId)
+				{
+					if (Main.player[playerId].active)
+					{
+						args.Player.SendSuccessMessage(recentAttempt.GetReport(Main.player[playerId]).ToString());
+					}
+				}
+			}
 		}
 
 
