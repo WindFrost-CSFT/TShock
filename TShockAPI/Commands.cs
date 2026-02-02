@@ -2571,9 +2571,6 @@ namespace TShockAPI
 			}
 			else
 			{
-				Main.dayTime = false;
-				Main.time = 16200.0;
-				TSPlayer.All.SendData(PacketTypes.WorldInfo);
 				WorldGen.StartMeteorShower();
 				TSPlayer.All.SendInfoMessage(GetString("{0} started a meteor shower.", args.Player.Name));
 			}
