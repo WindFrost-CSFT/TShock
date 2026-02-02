@@ -2461,7 +2461,13 @@ namespace TShockAPI
 		private static void Rain(CommandArgs args)
 		{
 			bool slime = false;
+			bool coin = false;
+
 			if (args.Parameters.Count > 1 && args.Parameters[1].Equals("slime", StringComparison.InvariantCultureIgnoreCase))
+			{
+				slime = true;
+			}
+			if (args.Parameters.Count > 1 && args.Parameters[1].Equals("coin", StringComparison.InvariantCultureIgnoreCase))
 			{
 				slime = true;
 			}
@@ -2469,6 +2475,11 @@ namespace TShockAPI
 			if (!slime)
 			{
 				args.Player.SendInfoMessage(GetString("Use \"{0}worldevent rain slime\" to start slime rain!", Specifier));
+			}
+
+			if (!coin)
+			{
+				args.Player.SendInfoMessage(GetString("Use \"{0}worldevent coin slime\" to start coin rain!", Specifier));
 			}
 
 			if (slime && Main.raining) //Slime rain cannot be activated during normal rain
@@ -2490,9 +2501,10 @@ namespace TShockAPI
 				Main.StartSlimeRain(false);
 				TSPlayer.All.SendData(PacketTypes.WorldInfo);
 				TSPlayer.All.SendInfoMessage(GetString("{0} caused it to rain slime.", args.Player.Name));
+				return;
 			}
 
-			if (Main.raining && !slime) //Toggle rain off
+			if (Main.raining && !slime && !coin) //Toggle rain off
 			{
 				Main.StopRain();
 				TSPlayer.All.SendData(PacketTypes.WorldInfo);
@@ -2500,12 +2512,29 @@ namespace TShockAPI
 				return;
 			}
 
-			if (!Main.raining && !slime) //Toggle rain on
+			if (!Main.raining && !slime && !coin) //Toggle rain on
 			{
 				Main.StartRain();
 				TSPlayer.All.SendData(PacketTypes.WorldInfo);
 				TSPlayer.All.SendInfoMessage(GetString("{0} caused it to rain.", args.Player.Name));
 				return;
+			}
+
+			bool coinrain = Main.coinRain != 0;
+
+			if (!coinrain && coin) //Toggle coin rain on
+			{
+				Main.StartRain();
+				TSPlayer.All.SendData(PacketTypes.WorldInfo);
+				TSPlayer.All.SendInfoMessage(GetString("{0} caused it to coin rain.", args.Player.Name));
+				return;
+			}
+
+			if (coinrain && coin) //Toggle coin rain off
+			{
+				Main.StopRain();
+				TSPlayer.All.SendData(PacketTypes.WorldInfo);
+				TSPlayer.All.SendInfoMessage(GetString("{0} ended the coin rain.", args.Player.Name));
 			}
 		}
 
