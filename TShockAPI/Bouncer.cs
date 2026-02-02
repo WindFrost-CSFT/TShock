@@ -694,7 +694,7 @@ namespace TShockAPI
 					var actualItemPlaceStyle = selectedItem.placeStyle;
 
 					// The client has requested to place a style that does not match their held item's actual place style
-					if (requestedPlaceStyle != actualItemPlaceStyle)
+					if (requestedPlaceStyle != actualItemPlaceStyle && selectedItem.type is not (ItemID.AcornAxe or ItemID.StaffofRegrowth))
 					{
 						var tplayer = args.Player.TPlayer;
 						// Search for an extraneous tile corrector
