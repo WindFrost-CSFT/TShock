@@ -1401,11 +1401,13 @@ namespace TShockAPI
 					|| (type >= ProjectileID.MartianTurretBolt && type <= ProjectileID.RayGunnerLaser)
 					|| type == ProjectileID.CultistBossLightningOrb)
 				{
+					return;
 					TShock.Log.ConsoleDebug(GetString("Bouncer / OnNewProjectile rejected from weird check from {0} {1}", args.Player.Name, type));
 					TShock.Log.Debug(GetString("Certain projectiles have been ignored for cheat detection."));
 				}
 				else
 				{
+					return;
 					TShock.Log.ConsoleDebug(GetString("Bouncer / OnNewProjectile please report to tshock about this! normally this is a reject from {0} {1}", args.Player.Name, type));
 					// args.Player.Disable(String.Format("Does not have projectile permission to update projectile. ({0})", type), DisableFlags.WriteToLogAndConsole);
 					// args.Player.RemoveProjectile(ident, owner);
