@@ -2132,7 +2132,7 @@ namespace TShockAPI
 			}
 
 			// "TorchSlime" will add a super long burn buff
-			if (type == BuffID.OnFire && Main.getGoodWorld && npc.type == NPCID.BlueSlime && (short)npc.ai[1] == ItemID.Torch)
+			if (type == BuffID.OnFire && Main.getGoodWorld && npc.aiStyle == 1 && (short)npc.ai[1] == ItemID.Torch)
 			{
 				return;
 			}
