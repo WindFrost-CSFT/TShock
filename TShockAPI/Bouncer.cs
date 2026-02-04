@@ -1061,8 +1061,6 @@ namespace TShockAPI
 				}
 				args.Handled = false;
 
-				Terraria.WorldGen.SecretSeed.Enable(WorldGen.SecretSeed.AllSecretSeeds[0]);
-
 
 				return;
 			}
