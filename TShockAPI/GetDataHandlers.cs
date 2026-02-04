@@ -4763,10 +4763,10 @@ namespace TShockAPI
 
 		private static bool HandleSyncPlayerSpectating(GetDataHandlerArgs args)
 		{
-			if (!args.Player.HasPermission(Permissions.playerspectating))
-			{
-				return true;
-			}
+			// if (!args.Player.HasPermission(Permissions.playerspectating))
+			// {
+			// 	return true;
+			// }
 			return false;
 		}
 
