@@ -511,6 +511,9 @@ namespace TShockAPI
 
 		[Description("Player can send emotes.")]
 		public static readonly string sendemoji = "tshock.sendemoji";
+
+		[Description("Player can send emotes.")]
+		public static readonly string playerspectating = "tshock.spectating";
 		#endregion
 		/// <summary>
 		/// Lists all commands associated with a given permission

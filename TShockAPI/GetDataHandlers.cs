@@ -157,7 +157,8 @@ namespace TShockAPI
 					{ PacketTypes.SyncCavernMonsterType, HandleSyncCavernMonsterType },
 					{ PacketTypes.SyncLoadout, HandleSyncLoadout },
 					{ PacketTypes.SyncItemCannotBeTakenByEnemies, HandleItemDrop },
-					{ PacketTypes.SyncItemsWithShimmer, HandleItemDrop }
+					{ PacketTypes.SyncItemsWithShimmer, HandleItemDrop },
+				    { PacketTypes.SyncPlayerSpectating, HandleSyncPlayerSpectating }
 				};
 		}
 		[Conditional("FALSE")]
@@ -4757,6 +4758,15 @@ namespace TShockAPI
 				Terraria.Utils.Swap(ref args.Player.PlayerData.inventory[switchedLoadoutDyeSlotStartIndex + i],
 					ref args.Player.PlayerData.inventory[NetItem.DyeIndex.Item1 + i]);
 
+			return false;
+		}
+
+		private static bool HandleSyncPlayerSpectating(GetDataHandlerArgs args)
+		{
+			if (!args.Player.HasPermission(Permissions.playerspectating))
+			{
+				return true;
+			}
 			return false;
 		}
 
