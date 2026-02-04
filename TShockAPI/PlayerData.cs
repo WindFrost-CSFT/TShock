@@ -87,7 +87,7 @@ namespace TShockAPI
 				for (int i = 0; i < TShock.ServerSideCharacterConfig.Settings.StartingInventory.Count; i++)
 				{
 					var item = TShock.ServerSideCharacterConfig.Settings.StartingInventory[i];
-					StoreSlot(i, item.NetId, item.PrefixId, item.Stack);
+					StoreSlot(i, item.NetId, item.PrefixId, item.Stack, item.Favorited);
 				}
 		}
 
@@ -98,9 +98,10 @@ namespace TShockAPI
 		/// <param name="netID"></param>
 		/// <param name="prefix"></param>
 		/// <param name="stack"></param>
-		public void StoreSlot(int slot, int netID, byte prefix, int stack)
+		/// <param name="favorited"></param>
+		public void StoreSlot(int slot, int netID, byte prefix, int stack, bool favorited)
 		{
-			StoreSlot(slot, new NetItem(netID, stack, prefix));
+			StoreSlot(slot, new NetItem(netID, stack, prefix, favorited));
 		}
 
 		/// <summary>
@@ -543,58 +544,73 @@ namespace TShockAPI
 			// the items.
 			// This is sent to everyone BUT this player, and then ONLY this player. When using UUID login, it is too soon for the server to
 			// broadcast packets to this client.
-			NetMessage.SendData((int)PacketTypes.SyncLoadout, remoteClient: player.Index, number: player.Index, number2: player.TPlayer.CurrentLoadoutIndex);
-			NetMessage.SendData((int)PacketTypes.SyncLoadout, ignoreClient: player.Index, number: player.Index, number2: player.TPlayer.CurrentLoadoutIndex);
+			NetMessage.SendData((int)PacketTypes.SyncLoadout, remoteClient: player.Index, number: player.Index,
+				number2: player.TPlayer.CurrentLoadoutIndex);
+			NetMessage.SendData((int)PacketTypes.SyncLoadout, ignoreClient: player.Index, number: player.Index,
+				number2: player.TPlayer.CurrentLoadoutIndex);
 
 
-			for (int index2 = 0; index2 < 59; ++index2)
-				NetMessage.TrySendData(5, number: player.Index, number2: (float) (PlayerItemSlotID.Inventory0 + index2));
-			TrySendingItemArray(player.Index, player.TPlayer.armor, PlayerItemSlotID.Armor0);
-			TrySendingItemArray(player.Index, player.TPlayer.dye, PlayerItemSlotID.Dye0);
-			TrySendingItemArray(player.Index, player.TPlayer.miscEquips, PlayerItemSlotID.Misc0);
-			TrySendingItemArray(player.Index, player.TPlayer.miscDyes, PlayerItemSlotID.MiscDye0);
-			TrySendingItemArray(player.Index, player.TPlayer.bank.item, PlayerItemSlotID.Bank1_0);
-			TrySendingItemArray(player.Index, player.TPlayer.bank2.item, PlayerItemSlotID.Bank2_0);
-			NetMessage.TrySendData(5, number: player.Index, number2: (float) PlayerItemSlotID.TrashItem);
-			TrySendingItemArray(player.Index, player.TPlayer.bank3.item, PlayerItemSlotID.Bank3_0);
-			TrySendingItemArray(player.Index, player.TPlayer.bank4.item, PlayerItemSlotID.Bank4_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[0].Armor, PlayerItemSlotID.Loadout1_Armor_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[0].Dye, PlayerItemSlotID.Loadout1_Dye_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[1].Armor, PlayerItemSlotID.Loadout2_Armor_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[1].Dye, PlayerItemSlotID.Loadout2_Dye_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[2].Armor, PlayerItemSlotID.Loadout3_Armor_0);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[2].Dye, PlayerItemSlotID.Loadout3_Dye_0);
+			for (var i = 0; i < NetItem.InventorySlots; ++i)
+				NetMessage.TrySendData((int)PacketTypes.PlayerSlot, number: player.Index,
+					number2: PlayerItemSlotID.Inventory0 + i);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.armor, PlayerItemSlotID.Armor0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.dye, PlayerItemSlotID.Dye0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.miscEquips, PlayerItemSlotID.Misc0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.miscDyes, PlayerItemSlotID.MiscDye0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.bank.item, PlayerItemSlotID.Bank1_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.bank2.item, PlayerItemSlotID.Bank2_0);
+			NetMessage.TrySendData((int)PacketTypes.PlayerSlot, number: player.Index,
+				number2: PlayerItemSlotID.TrashItem);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.bank3.item, PlayerItemSlotID.Bank3_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.bank4.item, PlayerItemSlotID.Bank4_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[0].Armor,
+				PlayerItemSlotID.Loadout1_Armor_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[0].Dye, PlayerItemSlotID.Loadout1_Dye_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[1].Armor,
+				PlayerItemSlotID.Loadout2_Armor_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[1].Dye, PlayerItemSlotID.Loadout2_Dye_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[2].Armor,
+				PlayerItemSlotID.Loadout3_Armor_0);
+			TrySendingItemArray(player.Index, -1, -1, player.TPlayer.Loadouts[2].Dye, PlayerItemSlotID.Loadout3_Dye_0);
 
 
-			NetMessage.SendData(4, -1, -1, NetworkText.FromLiteral(player.Name), player.Index, 0f, 0f, 0f, 0);
-			NetMessage.SendData(42, -1, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
-			NetMessage.SendData(16, -1, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
+			NetMessage.SendData((int)PacketTypes.PlayerInfo, -1, -1, NetworkText.FromLiteral(player.Name),
+				player.Index);
+			NetMessage.SendData((int)PacketTypes.PlayerMana, -1, -1, NetworkText.Empty, player.Index);
+			NetMessage.SendData((int)PacketTypes.PlayerHp, -1, -1, NetworkText.Empty, player.Index);
 
-			for (var index2 = 0; index2 < 59; ++index2)
-				NetMessage.TrySendData(5,remoteClient:player.Index, number: player.Index, number2: (PlayerItemSlotID.Inventory0 + index2));
-			TrySendingItemArray(player.Index, player.TPlayer.armor, PlayerItemSlotID.Armor0, player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.dye, PlayerItemSlotID.Dye0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.miscEquips, PlayerItemSlotID.Misc0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.miscDyes, PlayerItemSlotID.MiscDye0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.bank.item, PlayerItemSlotID.Bank1_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.bank2.item, PlayerItemSlotID.Bank2_0,player.Index);
-			NetMessage.TrySendData(5,remoteClient:player.Index, number: player.Index, number2: PlayerItemSlotID.TrashItem);
-			TrySendingItemArray(player.Index, player.TPlayer.bank3.item, PlayerItemSlotID.Bank3_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.bank4.item, PlayerItemSlotID.Bank4_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[0].Armor, PlayerItemSlotID.Loadout1_Armor_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[0].Dye, PlayerItemSlotID.Loadout1_Dye_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[1].Armor, PlayerItemSlotID.Loadout2_Armor_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[1].Dye, PlayerItemSlotID.Loadout2_Dye_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[2].Armor, PlayerItemSlotID.Loadout3_Armor_0,player.Index);
-			TrySendingItemArray(player.Index, player.TPlayer.Loadouts[2].Dye, PlayerItemSlotID.Loadout3_Dye_0,player.Index);
+			for (var i = 0; i < NetItem.InventorySlots; ++i)
+				NetMessage.TrySendData((int)PacketTypes.PlayerSlot, remoteClient: player.Index, number: player.Index,
+					number2: PlayerItemSlotID.Inventory0 + i);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.armor, PlayerItemSlotID.Armor0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.dye, PlayerItemSlotID.Dye0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.miscEquips, PlayerItemSlotID.Misc0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.miscDyes, PlayerItemSlotID.MiscDye0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.bank.item, PlayerItemSlotID.Bank1_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.bank2.item, PlayerItemSlotID.Bank2_0);
+			NetMessage.TrySendData((int)PacketTypes.PlayerSlot, remoteClient: player.Index, number: player.Index,
+				number2: PlayerItemSlotID.TrashItem);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.bank3.item, PlayerItemSlotID.Bank3_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.bank4.item, PlayerItemSlotID.Bank4_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[0].Armor,
+				PlayerItemSlotID.Loadout1_Armor_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[0].Dye,
+				PlayerItemSlotID.Loadout1_Dye_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[1].Armor,
+				PlayerItemSlotID.Loadout2_Armor_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[1].Dye,
+				PlayerItemSlotID.Loadout2_Dye_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[2].Armor,
+				PlayerItemSlotID.Loadout3_Armor_0);
+			TrySendingItemArray(player.Index, player.Index, -1, player.TPlayer.Loadouts[2].Dye,
+				PlayerItemSlotID.Loadout3_Dye_0);
 
+			NetMessage.SendData((int)PacketTypes.PlayerInfo, player.Index, -1, NetworkText.FromLiteral(player.Name),
+				player.Index);
+			NetMessage.SendData((int)PacketTypes.PlayerMana, player.Index, -1, NetworkText.Empty, player.Index);
+			NetMessage.SendData((int)PacketTypes.PlayerHp, player.Index, -1, NetworkText.Empty, player.Index);
 
-
-			NetMessage.SendData(4, player.Index, -1, NetworkText.FromLiteral(player.Name), player.Index, 0f, 0f, 0f, 0);
-			NetMessage.SendData(42, player.Index, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
-			NetMessage.SendData(16, player.Index, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
-
-			for (int k = 0; k < Player.maxBuffs; k++)
+			for (var k = 0; k < Player.maxBuffs; k++)
 			{
 				player.TPlayer.buffType[k] = 0;
 			}
@@ -605,33 +621,36 @@ namespace TShockAPI
 			 * This is for when players login via uuid or serverpassword instead of via
 			 * the login command.
 			 */
-			NetMessage.SendData(50, -1, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
-			NetMessage.SendData(50, player.Index, -1, NetworkText.Empty, player.Index, 0f, 0f, 0f, 0);
+			NetMessage.SendData((int)PacketTypes.PlayerBuff, -1, -1, NetworkText.Empty, player.Index);
+			NetMessage.SendData((int)PacketTypes.PlayerBuff, player.Index, -1, NetworkText.Empty, player.Index);
 
-			NetMessage.SendData(76, player.Index, -1, NetworkText.Empty, player.Index);
-			NetMessage.SendData(76, -1, -1, NetworkText.Empty, player.Index);
+			NetMessage.SendData((int)PacketTypes.NumberOfAnglerQuestsCompleted, player.Index, -1, NetworkText.Empty,
+				player.Index);
+			NetMessage.SendData((int)PacketTypes.NumberOfAnglerQuestsCompleted, -1, -1, NetworkText.Empty,
+				player.Index);
 
-			NetMessage.SendData(39, player.Index, -1, NetworkText.Empty, 400);
+			// NetMessage.SendData((int)PacketTypes.RemoveItemOwner, player.Index, -1, NetworkText.Empty, 400);
 
 			if (Main.IsJourneyMode)
 			{
 				var sacrificedItems = TShock.ResearchDatastore.GetSacrificedItems();
-				for(int i = 0; i < ItemID.Count; i++)
+				for (int i = 0; i < ItemID.Count; i++)
 				{
 					sacrificedItems.TryGetValue(i, out int amount);
 
-					var response = NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index,i, amount);
+					var response =
+						NetCreativeUnlocksPlayerReportModule.SerializeSacrificeRequest(player.Index, i, amount);
 					NetManager.Instance.SendToClient(response, player.Index);
-
 				}
 			}
+
 			// 别删了，ItemOwner那边应该是依赖于原版的一个行为会发包恢复，现在好像没了，先用这个
 			player.IgnoreSSCPackets = false;
 		}
 
-		private static void TrySendingItemArray(int plr, Item[] array, int slotStartIndex,int remoteClient = -1, int ignoreClient = -1)
+		private static void TrySendingItemArray(int plr,int remoteClient, int ignoreClient, Item[] array, int slotStartIndex)
 		{
-			for (int index = 0; index < array.Length; ++index)
+			for (var index = 0; index < array.Length; ++index)
 			{
 				NetMessage.TrySendData(5, number: plr, number2: slotStartIndex + index, remoteClient: remoteClient, ignoreClient: ignoreClient);
 			}

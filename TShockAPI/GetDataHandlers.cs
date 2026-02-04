@@ -2697,6 +2697,9 @@ namespace TShockAPI
 			short stack = args.Data.ReadInt16();
 			byte prefix = args.Data.ReadInt8();
 			short type = args.Data.ReadInt16();
+			BitsByte slotFlags = args.Data.ReadInt8();
+			bool favorited = slotFlags[0];
+			bool blockedSlot = slotFlags[1];
 
 			// Players send a slot update packet for each inventory slot right after they've joined.
 			bool bypassTrashCanCheck = false;
@@ -2720,10 +2723,12 @@ namespace TShockAPI
 			var item = new Item();
 			item.netDefaults(type);
 			item.Prefix(prefix);
+			item.favorited = favorited;
+			item.stack = stack;
 
 			if (args.Player.IsLoggedIn)
 			{
-				args.Player.PlayerData.StoreSlot(slot, type, prefix, stack);
+				args.Player.PlayerData.StoreSlot(slot, type, prefix, stack, favorited);
 			}
 			else if (Main.ServerSideCharacter && TShock.Config.Settings.DisableLoginBeforeJoin && !bypassTrashCanCheck &&
 					 args.Player.HasSentInventory && !args.Player.HasPermission(Permissions.bypassssc))
@@ -2734,7 +2739,6 @@ namespace TShockAPI
 
 			if (slot == 58) //this is the hand
 			{
-				item.stack = stack;
 				args.Player.ItemInHand = item;
 			}
 
