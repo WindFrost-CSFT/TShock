@@ -70,6 +70,12 @@ namespace TShockAPI
 		{
 			try
 			{
+				// Check whether update checking is disabled
+				if (TShock.Config.Settings.DisabledUpdateCheck)
+				{
+					return;
+				}
+
 				CheckXMinutes = 30;
 				await UpdateCheckAsync(state);
 			}

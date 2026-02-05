@@ -15,6 +15,10 @@ namespace TShockAPI.Configuration
 
 		#region Server Settings
 
+		/// <summary>Disables update checking on server start and periodically while running.</summary>
+		[Description("Disables update checking on server start and periodically while running.")]
+		public bool DisabledUpdateCheck = true;
+
 		/// <summary>The server password required to join the server.</summary>
 		[Description("The server password required to join the server.")]
 		public string ServerPassword = "";
