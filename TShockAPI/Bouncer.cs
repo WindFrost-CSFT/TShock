@@ -855,6 +855,13 @@ namespace TShockAPI
 						}
 					}
 
+					if (selectedItem.type == ItemID.AcornSlingshot && editData != TileID.Saplings)
+					{
+						TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from using acorn slingshot but not placing saplings {0} {1} {2}", args.Player.Name, action, editData));
+						args.Player.SendTileSquareCentered(tileX, tileY, 4);
+						args.Handled = true;
+					}
+
 					// Handle placement action if the player is using an Ice Rod but not placing the iceblock.
 					if (selectedItem.type == ItemID.IceRod && editData != TileID.MagicalIceBlock)
 					{
@@ -866,7 +873,7 @@ namespace TShockAPI
 					if ((action == EditAction.PlaceTile || action == EditAction.ReplaceTile) && editData != selectedItem.createTile)
 					{
 						// These would get caught up in the below check because Terraria does not set their createTile field.
-						if (selectedItem.type != ItemID.IceRod && selectedItem.type != ItemID.DirtBomb && selectedItem.type != ItemID.StickyBomb && (args.Player.TPlayer.mount.Type != MountID.DiggingMoleMinecart || editData != TileID.MinecartTrack) && selectedItem.type != ItemID.AcornAxe && selectedItem.type != ItemID.StaffofRegrowth)
+						if (selectedItem.type != ItemID.IceRod && selectedItem.type != ItemID.DirtBomb && selectedItem.type != ItemID.StickyBomb && (args.Player.TPlayer.mount.Type != MountID.DiggingMoleMinecart || editData != TileID.MinecartTrack) && selectedItem.type != ItemID.AcornAxe && selectedItem.type != ItemID.StaffofRegrowth && selectedItem.type != ItemID.AcornSlingshot)
 						{
 							TShock.Log.ConsoleDebug(GetString("Bouncer / OnTileEdit rejected from tile placement not matching selected item createTile {0} {1} {2} selectedItemID:{3} createTile:{4}", args.Player.Name, action, editData, selectedItem.type, selectedItem.createTile));
 							args.Player.SendTileSquareCentered(tileX, tileY, 4);
