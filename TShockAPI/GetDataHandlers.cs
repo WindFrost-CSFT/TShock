@@ -34,6 +34,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
+using NuGet.Protocol.Plugins;
 using TShockAPI.Localization;
 using TShockAPI.Models;
 using TShockAPI.Models.PlayerUpdate;
@@ -4043,11 +4044,6 @@ namespace TShockAPI
 					args.Player.Teleport(args.TPlayer.position.X, args.TPlayer.position.Y);
 					return true;
 				}
-			}
-
-			if (type == 3)
-			{
-				//TODO
 			}
 
 			return false;
