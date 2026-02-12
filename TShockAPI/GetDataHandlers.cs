@@ -112,7 +112,7 @@ namespace TShockAPI
 					{ PacketTypes.PlayerAnimation, HandlePlayerAnimation },
 					{ PacketTypes.PlayerMana, HandlePlayerMana },
 					{ PacketTypes.PlayerTeam, HandlePlayerTeam },
-					{ PacketTypes.TeamChangeWithSpawnCheck, HandlePlayerTeam },
+					{ PacketTypes.TeamChangeFromUI, HandlePlayerTeam },
 					{ PacketTypes.SignRead, HandleSignRead },
 					{ PacketTypes.SignNew, HandleSign },
 					{ PacketTypes.LiquidSet, HandleLiquidSet },
@@ -158,7 +158,7 @@ namespace TShockAPI
 					{ PacketTypes.SyncLoadout, HandleSyncLoadout },
 					{ PacketTypes.SyncItemCannotBeTakenByEnemies, HandleItemDrop },
 					{ PacketTypes.SyncItemsWithShimmer, HandleItemDrop },
-				    { PacketTypes.SyncPlayerSpectating, HandleSyncPlayerSpectating }
+				    { PacketTypes.SpectatePlayer, HandleSyncPlayerSpectating }
 				};
 		}
 		[Conditional("FALSE")]
