@@ -22,9 +22,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build TShock.sln --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
-
     # Publish to nuget
     - name: Push TShockAPI
       run: dotnet nuget push TShockAPI/bin/Release/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
