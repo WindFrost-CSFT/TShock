@@ -1,8 +1,7 @@
 name: Deploy NuGet(OTAPI3)
 
 on:
-  push:
-    branches: [ nuget-release ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,7 +20,10 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build TShock.sln --configuration Release --no-restore
+      run: |
+        dotnet build -c Release
+        dotnet pack -c Release -o nupkgs
     # Publish to nuget
     - name: Push TShockAPI
-      run: dotnet nuget push TShockAPI/bin/Release/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+      run: |
+        dotnet nuget push nupkgs/UnrealMultiple.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
