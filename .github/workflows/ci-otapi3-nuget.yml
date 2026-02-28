@@ -1,8 +1,7 @@
 name: Deploy NuGet(OTAPI3)
 
 on:
-  push:
-    branches: [ nuget-release ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,20 +10,20 @@ jobs:
     environment: release
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: 'recursive'
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build TShock.sln --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
-
-    # Publish to nuget
-    - name: Push TShockAPI
-      run: dotnet nuget push TShockAPI/bin/Release/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: |
+          dotnet build -c Release
+          dotnet pack -c Release -o nupkgs
+      # Publish to nuget
+      - name: Push TShockAPI
+        run: |
+          dotnet nuget push nupkgs/UnrealMultiple.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

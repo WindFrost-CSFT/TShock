@@ -18,7 +18,7 @@
       Also, be sure to release on github with the exact assembly version tag as below
       so that the update manager works correctly (via the Github releases api and mimic)
     -->
-    <Version>5.9.9</Version>
+    <Version>6.0.2</Version>
     <AssemblyTitle>TShock for Terraria</AssemblyTitle>
     <Company>Pryaxis &amp; TShock Contributors</Company>
     <Product>TShockAPI</Product>
@@ -28,7 +28,7 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <Authors>Pryaxis &amp; TShock Contributors</Authors>
     <Description>TShock is a toolbox for Terraria servers and communities.</Description>
-    <PackageId>TShock</PackageId> <!-- package name for nuget, instead of TShockAPI -->
+    <PackageId>UnrealMultiple.TShock-Beta</PackageId> <!-- package name for nuget, instead of TShockAPI -->
   </PropertyGroup>
 
   <ItemGroup>
